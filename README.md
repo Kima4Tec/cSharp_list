@@ -11,6 +11,7 @@
 7. [Domain Driven Design (DDD)](#domain-driven-design-ddd)
 8. [.NET Apps](#net-apps)
 9. [Klasser](#klasser)
+10. [Objekt](#objekt)
 
 ---
 
