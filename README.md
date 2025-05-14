@@ -22,6 +22,7 @@
 18. [Data Transfer Objects](#dto)
 19. [Automapper](#automapper)
 20. [JWT](#jwt)
+21. [BScript](#bscript)
 
 
 
@@ -952,4 +953,46 @@ return tokenHandler.WriteToken(token);
 JWT er en effektiv og sikker måde at håndtere autentificering i moderne web-API'er. Det giver en enkel metode til at overføre brugerinformation på en pålidelig måde.
 
 
+---
+[Home](#indholdsfortegnelse)
+## BScript 
+Bcrypt – Sikker adgangskode-hashning
+
+**Bcrypt** er en populær og sikker metode til at hashe adgangskoder. I stedet for at gemme brugerens adgangskode i klartekst i databasen, konverteres den til en hash-værdi, som ikke kan dekrypteres tilbage til den oprindelige adgangskode.
+
+### Hvorfor bruge Bcrypt?
+
+- Beskytter brugernes adgangskoder, selv hvis databasen bliver lækket.
+- Tilføjer en **salt** (tilfældig værdi) automatisk, som gør hver hash unik – også hvis to brugere har samme adgangskode.
+- Er langsom med vilje for at modvirke brute-force-angreb.
+
+### Hvordan virker det i et API?
+
+1. **Registrering**:
+   - Brugeren sender en adgangskode.
+   - API'et hasher adgangskoden med `bcrypt`.
+   - Den hashede værdi gemmes i databasen.
+
+2. **Login**:
+   - Brugeren indtaster adgangskode.
+   - API'et henter den gemte hash fra databasen.
+   - `bcrypt` sammenligner input med hash og validerer adgangskoden.
+
+### Eksempel i C# (.NET)
+
+```csharp
+using BCrypt.Net;
+
+// Hash en adgangskode
+string hashedPassword = BCrypt.Net.BCrypt.HashPassword("MinSikreKode123!");
+
+// Sammenlign input med hash
+bool isValid = BCrypt.Net.BCrypt.Verify("MinSikreKode123!", hashedPassword);
+```
+
+### Installation (NuGet)
+dotnet add package BCrypt.Net-Next
+
+### Link
+[Bcrypt.Net-Next på NuGet](https://www.nuget.org/packages/BCrypt.Net-Next)
 
