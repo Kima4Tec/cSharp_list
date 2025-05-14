@@ -24,8 +24,9 @@
 20. [Objekt](#objekt)  
 21. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
 22. [Repository og interface](#repository-og-interface)  
-23. [Separation of Concerns](#separation-of-concerns)  
-24. [.NET Apps](#net-apps)
+23. [Separation of Concerns](#separation-of-concerns)
+24. [Services](#services)  
+25. [.NET Apps](#net-apps)
 
 
 
@@ -1089,9 +1090,6 @@ public class ApplicationDbContext : DbContext
 
 [Home](#indholdsfortegnelse)
 # Fluent API
-
-### Hvad er Fluent API?
-
 **Fluent API** er en måde at konfigurere din datamodel i Entity Framework Core ved hjælp af metodekædning (method chaining) i `OnModelCreating`-metoden i din `DbContext`.
 
 Det er et alternativ (og supplement) til at bruge **data annotations** (som f.eks. `[Required]`, `[Key]`, `[MaxLength]` osv. direkte på modelklasser).
@@ -1170,9 +1168,6 @@ Fluent API er nødvendigt, når du skal have **fuld kontrol** over, hvordan dine
 ---
 [Home](#indholdsfortegnelse)
 # Controllers
-
-## 🎯 Hvad er en Controller?
-
 En **Controller** i ASP.NET Core er en central del af **MVC (Model-View-Controller)**-designmønstret og fungerer som en **formidler** mellem brugerens input og applikationens logik. Controlleren **modtager HTTP-anmodninger**, behandler dem og returnerer **svar (response)** til brugeren, ofte i form af **HTML, JSON** eller **XML**.
 
 ### Rolle og Ansvar
@@ -1257,4 +1252,68 @@ namespace MyApplication.Controllers
 - Det er vigtigt at følge **best practices** for at holde controlleren **slank** og ansvarlig kun for routing og simpel datahåndtering.
 
 
+---
+[Home](#indholdsfortegnelse)
+# Services
+En **service** i et API er en klasse, der indeholder **forretningslogik** – altså den kode, som bestemmer "hvordan ting fungerer" i applikationen. Den adskiller sig fra en controller, som kun håndterer HTTP-forespørgsler og -svar. Services sikrer en ren **Separation of Concerns**, hvor controlleren er tynd, og logikken er samlet ét sted.
+
+## Eksempel: `AuthService`
+
+```csharp
+public class AuthService
+{
+    private readonly IUserRepository _userRepository;
+
+    public AuthService(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    // Eksempel på metode:
+    public User? Authenticate(string username, string password)
+    {
+        var user = _userRepository.GetUserByUsername(username);
+        if (user == null) return null;
+
+        // Her kunne man tjekke password med bcrypt, fx:
+        // if (!BCrypt.Net.BCrypt.Verify(password, user.Password)) return null;
+
+        return user;
+    }
+}
+
+```
+
+### Hvad gør denne service?
+AuthService er en klasse, som står for autentificering (logik for login).
+
+Den bruger et IUserRepository til at tilgå data – den kommunikerer med datalaget (database).
+
+Den kunne også håndtere ting som token-generering (JWT), adgangsrettigheder og hashing af passwords.
+
+Hvorfor bruge services?
+- Genbrug: Logik genbruges flere steder i koden (fx fra både controller og tests).
+-  Testbarhed: Du kan let enhedsteste logik uden at involvere HTTP eller databasen direkte.
+-  Vedligeholdelse: Koden er lettere at læse, ændre og udvide.
+-  Adskillelse af ansvar: Controller håndterer HTTP, service håndterer logik, repository håndterer data.
+
+### Typisk struktur i en ASP.NET Core API
+**Controller:** Modtager HTTP-request → kalder service
+
+**Service:** Indeholder forretningslogik → kalder repository
+
+**Repository:** Henter eller gemmer data i databasen
+
+### Eksempel på flow:
+```csharp
+[HTTP Request] → Controller → Service → Repository → Database
+```
+
+### Opsummering
+Lag	Ansvar
+Controller	HTTP request/response
+Service	Forretningslogik
+Repository	Dataadgang (database-CRUD)
+
+Det gør din API robust, fleksibel og nemmere at teste og vedligeholde.
 
