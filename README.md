@@ -956,7 +956,7 @@ JWT er en effektiv og sikker måde at håndtere autentificering i moderne web-AP
 
 ---
 [Home](#indholdsfortegnelse)
-## BScript 
+## Bcrypt
 Bcrypt – Sikker adgangskode-hashning
 
 **Bcrypt** er en populær og sikker metode til at hashe adgangskoder. I stedet for at gemme brugerens adgangskode i klartekst i databasen, konverteres den til en hash-værdi, som ikke kan dekrypteres tilbage til den oprindelige adgangskode.
@@ -1002,3 +1002,82 @@ dotnet add package BCrypt.Net-Next
 [Home](#indholdsfortegnelse)
 ## Models
 
+# Ental og flertal i `ApplicationDbContext`
+
+I din `ApplicationDbContext`-klasse bruger du `DbSet<T>` til at definere tabellerne i databasen. Det er vigtigt at forstå navngivningskonventionerne for **ental og flertal** i forhold til **modeller (klasser)** og **DbSet-properties**.
+
+---
+
+## Ental: Modellens navn
+
+Modeller (classes) repræsenterer **én enkelt enhed** – altså **ental**.
+
+**Eksempler:**
+
+- `Artist` = én kunstner  
+- `Cover` = ét cover  
+- `Author` = én forfatter  
+- `Book` = én bog  
+- `User` = én bruger  
+
+Disse klasser definerer, hvilke felter (properties) der findes på en enkelt post i databasen.
+
+---
+
+## Flertal: DbSet-navnet
+
+`DbSet<T>` repræsenterer en **samling** af entiteter – altså **flertal**. Derfor navngives disse typisk i flertal.
+
+**Eksempler:**
+
+- `DbSet<Artist> Artists` = en samling af mange kunstnere  
+- `DbSet<Cover> Covers` = en samling af mange covers  
+- `DbSet<Book> Books` = en samling af mange bøger  
+
+Navnet bruges også af Entity Framework til at navngive tabeller i databasen – *medmindre du angiver andet*.
+
+---
+
+## Kort opsummering
+
+| Klasse (Ental) | DbSet (Flertal) | Beskrivelse                          |
+|----------------|------------------|--------------------------------------|
+| `Artist`       | `Artists`        | Én kunstner vs. mange kunstnere     |
+| `Cover`        | `Covers`         | Ét cover vs. mange covers           |
+| `Book`         | `Books`          | Én bog vs. mange bøger              |
+| `Author`       | `Authors`        | Én forfatter vs. mange forfattere   |
+| `User`         | `Users`          | Én bruger vs. mange brugere         |
+
+---
+
+## God praksis
+
+- **Entalsnavn** til klasserne (fordi det er én entitet).  
+- **Flertalsnavn** til `DbSet`-egenskaber (fordi det er en samling).
+
+### Modelbuilder
+Man kan også tilpasse tabelnavnene direkte ved at bruge modelBuilder i OnModelCreating
+```csharp
+public class ApplicationDbContext : DbContext
+{
+    public DbSet<Artist> Artists { get; set; }
+    public DbSet<Cover> Covers { get; set; }
+    public DbSet<ArtistCover> ArtistCovers { get; set; }
+    public DbSet<Book> Books { get; set; }
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<User> Users { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Her overskriver vi tabelnavnene
+        modelBuilder.Entity<Artist>().ToTable("Artist");
+        modelBuilder.Entity<Cover>().ToTable("Cover");
+        modelBuilder.Entity<ArtistCover>().ToTable("ArtistCover");
+        modelBuilder.Entity<Book>().ToTable("Book");
+        modelBuilder.Entity<Author>().ToTable("Author");
+        modelBuilder.Entity<User>().ToTable("User");
+    }
+}
+```
