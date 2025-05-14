@@ -24,6 +24,7 @@
 20. [JWT](#jwt)
 21. [Bcrypt](#bcrypt)
 22. [Models](#models)
+23. [Fluent Api](#fluent-api)
 
 
 
@@ -1081,3 +1082,86 @@ public class ApplicationDbContext : DbContext
     }
 }
 ```
+
+---
+
+[Home](#indholdsfortegnelse)
+# Fluent API
+
+### Hvad er Fluent API?
+
+**Fluent API** er en måde at konfigurere din datamodel i Entity Framework Core ved hjælp af metodekædning (method chaining) i `OnModelCreating`-metoden i din `DbContext`.
+
+Det er et alternativ (og supplement) til at bruge **data annotations** (som f.eks. `[Required]`, `[Key]`, `[MaxLength]` osv. direkte på modelklasser).
+
+Eksempel på Fluent API:
+
+```csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Book>()
+        .HasKey(b => b.Id);
+
+    modelBuilder.Entity<Book>()
+        .Property(b => b.Title)
+        .IsRequired()
+        .HasMaxLength(100);
+}
+```
+
+---
+
+### Hvorfor bruge Fluent API?
+
+### 1. **Avanceret konfiguration**
+Nogle konfigurationer kan **kun** laves med Fluent API, fx:
+- Komplekse relationer (f.eks. mange-til-mange uden eksplicit join-entity)
+- Shadow properties
+- Konfiguration af indekser
+- Tabelnavne, kolonnenavne og skemaer
+
+### 2. **Central konfiguration**
+Alt model-relateret konfiguration samles ét sted (`OnModelCreating`). Det giver et klart overblik over hele databasens struktur uden at skulle åbne hver enkelt modelklasse.
+
+### 3. **Adskillelse af domænemodel og databasekonfiguration**
+Med Fluent API undgår du at blande databaserelateret logik (som `[Column("navn")]`) direkte i dine modelklasser.
+
+---
+
+### Fluent API vs Data Annotations
+
+| Funktion                  | Data Annotation | Fluent API   |
+|---------------------------|------------------|---------------|
+| Simpel konfiguration       | ✅               | ✅             |
+| Kompleks relationer        | ❌               | ✅             |
+| Bedre overblik i ét sted   | ❌               | ✅             |
+| Eksterne mapper-filer (separation) | ❌ | ✅             |
+| Shadow properties          | ❌               | ✅             |
+
+---
+
+### God praksis
+
+- Brug **data annotations** til simple krav (som `[Required]`, `[MaxLength]`).
+- Brug **Fluent API** til komplekse regler, relationer, constraints og konventioner.
+- Overvej at opdele Fluent-konfiguration i separate konfigurationsklasser (med `IEntityTypeConfiguration<T>`), hvis projektet vokser.
+
+---
+
+### Eksempel på relation med Fluent API
+
+```csharp
+modelBuilder.Entity<Author>()
+    .HasMany(a => a.Books)
+    .WithOne(b => b.Author)
+    .HasForeignKey(b => b.AuthorId);
+```
+
+Dette definerer en én-til-mange-relation mellem `Author` og `Book`.
+
+---
+
+### Konklusion
+
+Fluent API er nødvendigt, når du skal have **fuld kontrol** over, hvordan dine entiteter kortlægges til databasen. Det er kraftfuldt, fleksibelt og ofte uundværligt i større projekter eller avancerede databasedesigns.
+
