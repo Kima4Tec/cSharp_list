@@ -17,6 +17,7 @@
 13. [Separation of Concerns](#separation-of-concerns)
 14. [Code First](#code-first)
 15. [Encapsulation](#encapsulation)
+16. [ICollection](#icollection)
 
 ---
 
@@ -480,6 +481,56 @@ public class Person
 | Forbedrer vedligeholdelse | Ændringer sker ét sted |
 | Muliggør validering  | Du kan kontrollere, hvad der bliver sat |
 
+[Home](#indholdsfortegnelse)
+## ICollection
+I C# er ICollection<T> en generisk interface, der repræsenterer en generel samling af objekter, som kan tilgås individuelt. Den er en del af System.Collections.Generic og er basisklasse for mange typer som List<T>, HashSet<T>, osv.
 
+🔍 Hvad er ICollection<T>?
+ICollection<T> giver dig mulighed for at:
 
+Tilføje elementer (Add)
 
+Fjerne elementer (Remove)
+
+Tjekke om et element findes (Contains)
+
+Tælle antal elementer (Count)
+
+Rydde hele samlingen (Clear)
+
+Iterere over elementer (foreach, fordi den arver IEnumerable<T>)
+
+🧱 Hvad bruger man det til?
+Typisk bruger man ICollection<T> som property type i modeller, især i Entity Framework, når der er relationer mellem objekter.
+
+Eksempel:
+csharp
+Kopiér
+Rediger
+public class Author
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    // En forfatter kan have mange bøger
+    public ICollection<Book> Books { get; set; }
+}
+csharp
+Kopiér
+Rediger
+public class Book
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+
+    public int AuthorId { get; set; }
+    public Author Author { get; set; }
+}
+Her bruges ICollection<Book> til at vise, at en Author kan have flere Book-objekter.
+
+🧠 Hvorfor ikke bare List<T>?
+Abstraktion: ICollection<T> giver fleksibilitet – man er ikke bundet til én konkret type som List<T>.
+
+Testbarhed: Det er lettere at udskifte implementation i tests.
+
+Entity Framework bruger typisk ICollection<T> til navigation properties, men mapper det bag kulisserne til f.eks. HashSet<T>.
