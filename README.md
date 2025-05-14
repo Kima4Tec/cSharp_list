@@ -487,26 +487,18 @@ I C# er ICollection<T> en generisk interface, der repræsenterer en generel saml
 
 🔍 Hvad er ICollection<T>?
 ICollection<T> giver dig mulighed for at:
-
-Tilføje elementer (Add)
-
-Fjerne elementer (Remove)
-
-Tjekke om et element findes (Contains)
-
-Tælle antal elementer (Count)
-
-Rydde hele samlingen (Clear)
-
-Iterere over elementer (foreach, fordi den arver IEnumerable<T>)
+- Tilføje elementer (Add)
+- Fjerne elementer (Remove)
+- Tjekke om et element findes (Contains)
+- Tælle antal elementer (Count)
+- Rydde hele samlingen (Clear)
+- Iterere over elementer (foreach, fordi den arver IEnumerable<T>)
 
 🧱 Hvad bruger man det til?
 Typisk bruger man ICollection<T> som property type i modeller, især i Entity Framework, når der er relationer mellem objekter.
 
 Eksempel:
-csharp
-Kopiér
-Rediger
+```csharp
 public class Author
 {
     public int Id { get; set; }
@@ -515,9 +507,10 @@ public class Author
     // En forfatter kan have mange bøger
     public ICollection<Book> Books { get; set; }
 }
-csharp
-Kopiér
-Rediger
+```
+
+
+```csharp
 public class Book
 {
     public int Id { get; set; }
@@ -526,6 +519,8 @@ public class Book
     public int AuthorId { get; set; }
     public Author Author { get; set; }
 }
+```
+
 Her bruges ICollection<Book> til at vise, at en Author kan have flere Book-objekter.
 
 🧠 Hvorfor ikke bare List<T>?
