@@ -781,8 +781,6 @@ var dto = _mapper.Map<MovieDto>(movie);
 
 ---
 
-## 🔄 Hvorfor bruge AutoMapper?
-
 Når du har mange felter, og du skal **oversætte data frem og tilbage** mellem fx `Movie` og `MovieDto`, bliver det hurtigt kedeligt og fejlbehæftet at skrive dette manuelt:
 
 ```csharp
@@ -802,7 +800,7 @@ var dto = _mapper.Map<MovieDto>(movie);
 
 ---
 
-## 🛠️ Sådan bruger du AutoMapper
+## 🛠Sådan bruger du AutoMapper
 
 ### 1. Installer AutoMapper
 
@@ -867,7 +865,7 @@ public class MovieController : ControllerBase
 
 ---
 
-## 🎯 Fordele ved AutoMapper
+## Fordele ved AutoMapper
 
 | Fordel              | Beskrivelse                                               |
 |---------------------|-----------------------------------------------------------|
