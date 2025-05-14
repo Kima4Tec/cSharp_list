@@ -1,5 +1,5 @@
 
-# C# Notes
+# C# Noter
 
 ## Indholdsfortegnelse
 1. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)
