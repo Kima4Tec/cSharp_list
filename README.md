@@ -1,7 +1,7 @@
 
 # C# Noter
 
-## Indholdsfortegnelse
+# Indholdsfortegnelse
 1. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)
 2. [Clean Code](#clean-code)
 3. [Defensive Coding](#defensive-coding)
@@ -29,7 +29,7 @@
 
 ---
 
-## OOP (Objektorienteret programmering)
+# OOP (Objektorienteret programmering)
 
 C# OOP er en programmeringsparadigme, hvor kode organiseres omkring objekter. OOP i C# bygger på fire grundlæggende principper:
 
@@ -108,7 +108,7 @@ public abstract class Animal
 
 ---
 [Home](#indholdsfortegnelse)
-## Clean Code
+# Clean Code
 
 Principper for læsbar og vedligeholdelsesvenlig kode:
 
@@ -138,7 +138,7 @@ Skriv kode der forventer fejl og beskytter sig selv:
 
 ---
 
-## Iterative Agile
+# Iterative Agile
 
 Iterativ og Agile udvikling handler om:
 
@@ -151,7 +151,7 @@ Iterativ og Agile udvikling handler om:
 
 ---
 [Home](#indholdsfortegnelse)
-## API
+# API
 
 Et C# API (typisk ASP.NET Core) udstiller funktionalitet via HTTP:
 
@@ -191,7 +191,7 @@ Genanvendelige løsninger på velkendte problemer:
 
 ---
 [Home](#indholdsfortegnelse)
-## Domain Driven Design (DDD)
+# Domain Driven Design (DDD)
 
 Fokuser på forretningsdomænet og bygg din applikation derfra.
 
@@ -209,7 +209,7 @@ Fokuser på forretningsdomænet og bygg din applikation derfra.
 
 ---
 [Home](#indholdsfortegnelse)
-## .NET Apps
+# .NET Apps
 
 Typer af .NET apps:
 
@@ -224,7 +224,7 @@ Typer af .NET apps:
 
 ---
 [Home](#indholdsfortegnelse)
-## Klasser
+# Klasser
 
 En klasse i C# har:
 
@@ -284,7 +284,7 @@ Opsummering
 ---  
 
 [Home](#indholdsfortegnelse)
-## Objekt
+# Objekt
 
 I C# er et objekt en instans af en klasse – det vil sige, at det er et konkret stykke data, der er oprettet ud fra en skabelon (klassen). Objekter indeholder felter (data) og metoder (funktioner), som man kan bruge til at repræsentere og arbejde med virkelige ting.
 
@@ -342,7 +342,7 @@ class Program
 
 ---
 [Home](#indholdsfortegnelse)
-## Entity
+# Entity
 
 En Entity er en objektorienteret repræsentation af et forretningsobjekt. Det har typisk en unik identitet og bruges ofte i forbindelse med ORM som Entity Framework.
 
@@ -407,7 +407,7 @@ public class Order
 ---
 
 [Home](#indholdsfortegnelse)
-## Forretningsobjekt
+# Forretningsobjekt
 
 Et forretningsobjekt i C# er en klasse, der indeholder både data og forretningslogik og bruges til at repræsentere virkelige begreber som kunder og ordrer.
 
@@ -432,7 +432,7 @@ Et designprincip, hvor hver sektion i koden har ét ansvar. Det gør koden nemme
 
 ---
 [Home](#indholdsfortegnelse)
-## Code First
+# Code First
 
 
 En tilgang i Entity Framework, hvor du starter med C#-klasser og genererer databasen derfra.
@@ -490,10 +490,10 @@ public class Person
 | Muliggør validering  | Du kan kontrollere, hvad der bliver sat |
 
 [Home](#indholdsfortegnelse)
-## ICollection
+# ICollection
 I C# er ICollection<T> en generisk interface, der repræsenterer en generel samling af objekter, som kan tilgås individuelt. Den er en del af System.Collections.Generic og er basisklasse for mange typer som List<T>, HashSet<T>, osv.
 
-🔍 Hvad er ICollection<T>?
+ Hvad er ICollection<T>?
 ICollection<T> giver dig mulighed for at:
 - Tilføje elementer (Add)
 - Fjerne elementer (Remove)
@@ -540,7 +540,7 @@ Testbarhed: Det er lettere at udskifte implementation i tests.
 Entity Framework bruger typisk ICollection<T> til navigation properties, men mapper det bag kulisserne til f.eks. HashSet<T>.
 
 [Home](#indholdsfortegnelse)
-## Repository og interface
+# Repository og interface
 Når du laver en .NET API, er brugen af repository pattern og interfaces en god softwarearkitektur-praksis. Her er en grundig forklaring på hvorfor det er en fordel:
 
 ### Hvad er en Repository og et Interface?
@@ -638,7 +638,7 @@ Ved at bruge repository pattern og interfaces i din API får du:
 ---
 
 [Home](#indholdsfortegnelse)
-## DTO
+# DTO
 
 Når du laver en API, er det en rigtig god idé at bruge DTO'er – Data Transfer Objects. Her får du en forklaring på, hvad en DTO er, hvorfor du bruger den, og hvordan du implementerer det i en .NET API.
 
@@ -682,7 +682,7 @@ Når du modtager data (POST/PUT), kan du bruge en DTO til input, som indeholder 
 
 ## Eksempel på brug
 
-### 🎬 Model (fx i database):
+### Model (fx i database):
 ```csharp
 public class Movie
 {
@@ -775,7 +775,7 @@ var dto = _mapper.Map<MovieDto>(movie);
 ---
 
 [Home](#indholdsfortegnelse)
-## AutoMapper
+# AutoMapper
 
 **AutoMapper** er et populært bibliotek i .NET, der hjælper dig med at **automatisk konvertere mellem to objekter**, typisk mellem:
 
@@ -803,7 +803,7 @@ var dto = _mapper.Map<MovieDto>(movie);
 
 ---
 
-## 🛠Sådan bruger du AutoMapper
+## Sådan bruger du AutoMapper
 
 ### 1. Installer AutoMapper
 
@@ -880,7 +880,7 @@ public class MovieController : ControllerBase
 
 ---
 [Home](#indholdsfortegnelse)
-## JWT?
+# JWT?
 
 JWT står for **JSON Web Token**. Det er en standard til at sende oplysninger mellem to parter som et **signeret token** i JSON-format. Det bruges typisk til **autentificering og autorisation** i web-API'er.
 
@@ -956,7 +956,7 @@ JWT er en effektiv og sikker måde at håndtere autentificering i moderne web-AP
 
 ---
 [Home](#indholdsfortegnelse)
-## Bcrypt
+# Bcrypt
 Bcrypt – Sikker adgangskode-hashning
 
 **Bcrypt** er en populær og sikker metode til at hashe adgangskoder. I stedet for at gemme brugerens adgangskode i klartekst i databasen, konverteres den til en hash-værdi, som ikke kan dekrypteres tilbage til den oprindelige adgangskode.
@@ -1000,15 +1000,15 @@ dotnet add package BCrypt.Net-Next
 
 ---
 [Home](#indholdsfortegnelse)
-## Models
+# Models
 
-# Ental og flertal i `ApplicationDbContext`
+## Ental og flertal i `ApplicationDbContext`
 
-I din `ApplicationDbContext`-klasse bruger du `DbSet<T>` til at definere tabellerne i databasen. Det er vigtigt at forstå navngivningskonventionerne for **ental og flertal** i forhold til **modeller (klasser)** og **DbSet-properties**.
+Det er vigtigt at forstå navngivningskonventionerne for **ental og flertal** i forhold til **modeller (klasser)** og **DbSet-properties**.
 
 ---
 
-## Ental: Modellens navn
+### Ental: Modellens navn
 
 Modeller (classes) repræsenterer **én enkelt enhed** – altså **ental**.
 
@@ -1038,7 +1038,7 @@ Navnet bruges også af Entity Framework til at navngive tabeller i databasen –
 
 ---
 
-## Kort opsummering
+### Kort opsummering
 
 | Klasse (Ental) | DbSet (Flertal) | Beskrivelse                          |
 |----------------|------------------|--------------------------------------|
@@ -1050,7 +1050,7 @@ Navnet bruges også af Entity Framework til at navngive tabeller i databasen –
 
 ---
 
-## God praksis
+### God praksis
 
 - **Entalsnavn** til klasserne (fordi det er én entitet).  
 - **Flertalsnavn** til `DbSet`-egenskaber (fordi det er en samling).
