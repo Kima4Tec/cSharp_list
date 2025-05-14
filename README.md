@@ -14,6 +14,9 @@
 10. [Objekt](#objekt)
 11. [Entity](#entity)
 12. [Forretningsobjekt](#forretningsobjekt)
+13. [Separation of Concerns](#separation-of-concerns)
+14. [Code First](#code-first)
+15. [Encapsulation](#encapsulation)
 
 ---
 
