@@ -12,6 +12,8 @@
 8. [.NET Apps](#net-apps)
 9. [Klasser](#klasser)
 10. [Objekt](#objekt)
+11. [Entity](#entity)
+12. [Forretningsobjekt](#forretningsobjekt)
 
 ---
 
