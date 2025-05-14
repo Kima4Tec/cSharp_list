@@ -538,31 +538,31 @@ Entity Framework bruger typisk ICollection<T> til navigation properties, men map
 ## Repository og interface
 Når du laver en .NET API, er brugen af repository pattern og interfaces en god softwarearkitektur-praksis. Her er en grundig forklaring på hvorfor det er en fordel:
 
-Hvad er en Repository og et Interface?
-Repository: Et repository er en klasse, som indeholder logikken for at hente og gemme data (typisk i en database). Det fungerer som et mellemled mellem databasen og din controller/service.
+### Hvad er en Repository og et Interface?
+**Repository**: Et repository er en klasse, som indeholder logikken for at hente og gemme data (typisk i en database). Det fungerer som et mellemled mellem databasen og din controller/service.
 
-Interface (IRepository): Et interface definerer hvilke metoder repositoryet skal have (fx GetAll(), Add(), Delete()), uden at fortælle hvordan de implementeres.
+**Interface** (IRepository): Et interface definerer hvilke metoder repositoryet skal have (fx GetAll(), Add(), Delete()), uden at fortælle hvordan de implementeres.
 
-Fordele ved at bruge Repository og Interface
-1. Adskillelse af ansvar (Separation of Concerns)
+### Fordele ved at bruge Repository og Interface
+**1. Adskillelse af ansvar (Separation of Concerns)**
 Din controller (API endpoint) skal ikke bekymre sig om hvordan data hentes fra databasen – det overlades til repositoryet.
 
 Resultat: Koden bliver mere overskuelig og lettere at vedligeholde.
 
-2. Lettere at teste
+**2. Lettere at teste**
 Du kan bruge en mock af interfacet (IRepository) i dine tests i stedet for at bruge den rigtige database.
 
 Det gør unit tests hurtige og pålidelige.
 
-3. Fleksibilitet og udskiftelighed
+**3. Fleksibilitet og udskiftelighed**
 Hvis du skifter database (f.eks. fra SQL Server til MongoDB), skal du kun ændre repository-implementeringen – ikke resten af applikationen.
 
 Du kan også bruge flere implementeringer af samme interface, fx en in-memory version til test og en database-version til produktion.
 
-4. Genbrug og fælles logik
+**4. Genbrug og fælles logik**
 Repositoryet kan indeholde fælles datalogik (f.eks. søgning, filtrering, validering) som ellers ville blive gentaget i flere controllers.
 
-5. Rydder op i controlleren
+**5. Rydder op i controlleren**
 Controlleren bliver meget "ren" og fokuserer kun på at håndtere HTTP-anmodninger og svar:
 
 ```csharp
@@ -575,7 +575,7 @@ public async Task<IActionResult> GetAllMovies()
 ```
 
 
-Simpelt eksempel:
+### Simpelt eksempel:
 Interface:
 ```csharp
 public interface IRepository<T>
@@ -588,7 +588,7 @@ public interface IRepository<T>
 ```
 
 
-Repository (implementering):
+### Repository (implementering):
 ```csharp
 public class MovieRepository : IRepository<Movie>
 {
@@ -620,7 +620,7 @@ public class MovieRepository : IRepository<Movie>
     }
 }
 ```
-Opsummering
+### Opsummering
 Ved at bruge repository pattern og interfaces i din API får du:
 
 - Mere struktureret kode
