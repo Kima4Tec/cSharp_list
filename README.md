@@ -18,6 +18,9 @@
 14. [Code First](#code-first)
 15. [Encapsulation](#encapsulation)
 16. [ICollection](#icollection)
+17. [Repository og interface](#repository-og-interface)
+
+
 
 ---
 
@@ -530,3 +533,98 @@ Abstraktion: ICollection<T> giver fleksibilitet – man er ikke bundet til én k
 Testbarhed: Det er lettere at udskifte implementation i tests.
 
 Entity Framework bruger typisk ICollection<T> til navigation properties, men mapper det bag kulisserne til f.eks. HashSet<T>.
+
+[Home](#indholdsfortegnelse)
+## Repository og interface
+Når du laver en .NET API, er brugen af repository pattern og interfaces en god softwarearkitektur-praksis. Her er en grundig forklaring på hvorfor det er en fordel:
+
+Hvad er en Repository og et Interface?
+Repository: Et repository er en klasse, som indeholder logikken for at hente og gemme data (typisk i en database). Det fungerer som et mellemled mellem databasen og din controller/service.
+
+Interface (IRepository): Et interface definerer hvilke metoder repositoryet skal have (fx GetAll(), Add(), Delete()), uden at fortælle hvordan de implementeres.
+
+Fordele ved at bruge Repository og Interface
+1. Adskillelse af ansvar (Separation of Concerns)
+Din controller (API endpoint) skal ikke bekymre sig om hvordan data hentes fra databasen – det overlades til repositoryet.
+
+Resultat: Koden bliver mere overskuelig og lettere at vedligeholde.
+
+2. Lettere at teste
+Du kan bruge en mock af interfacet (IRepository) i dine tests i stedet for at bruge den rigtige database.
+
+Det gør unit tests hurtige og pålidelige.
+
+3. Fleksibilitet og udskiftelighed
+Hvis du skifter database (f.eks. fra SQL Server til MongoDB), skal du kun ændre repository-implementeringen – ikke resten af applikationen.
+
+Du kan også bruge flere implementeringer af samme interface, fx en in-memory version til test og en database-version til produktion.
+
+4. Genbrug og fælles logik
+Repositoryet kan indeholde fælles datalogik (f.eks. søgning, filtrering, validering) som ellers ville blive gentaget i flere controllers.
+
+5. Rydder op i controlleren
+Controlleren bliver meget "ren" og fokuserer kun på at håndtere HTTP-anmodninger og svar:
+
+```csharp
+[HttpGet]
+public async Task<IActionResult> GetAllMovies()
+{
+    var movies = await _movieRepository.GetAllAsync();
+    return Ok(movies);
+}
+```
+
+
+Simpelt eksempel:
+Interface:
+```csharp
+public interface IRepository<T>
+{
+    Task<IEnumerable<T>> GetAllAsync();
+    Task<T> GetByIdAsync(int id);
+    Task AddAsync(T entity);
+    Task DeleteAsync(int id);
+}
+```
+
+
+Repository (implementering):
+```csharp
+public class MovieRepository : IRepository<Movie>
+{
+    private readonly AppDbContext _context;
+
+    public MovieRepository(AppDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<IEnumerable<Movie>> GetAllAsync() => await _context.Movies.ToListAsync();
+
+    public async Task<Movie> GetByIdAsync(int id) => await _context.Movies.FindAsync(id);
+
+    public async Task AddAsync(Movie movie)
+    {
+        await _context.Movies.AddAsync(movie);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var movie = await _context.Movies.FindAsync(id);
+        if (movie != null)
+        {
+            _context.Movies.Remove(movie);
+            await _context.SaveChangesAsync();
+        }
+    }
+}
+```
+Opsummering
+Ved at bruge repository pattern og interfaces i din API får du:
+
+- Mere struktureret kode
+- Bedre testbarhed
+- Større fleksibilitet
+- Mindre afhængighed af teknologivalg (f.eks. EF Core)
+- Det er især en fordel i mellemstore til store projekter, eller når flere udviklere arbejder sammen.
