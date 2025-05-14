@@ -628,3 +628,138 @@ Ved at bruge repository pattern og interfaces i din API får du:
 - Større fleksibilitet
 - Mindre afhængighed af teknologivalg (f.eks. EF Core)
 - Det er især en fordel i mellemstore til store projekter, eller når flere udviklere arbejder sammen.
+- 
+
+## DTO i .NET API
+
+Når du laver en API, er det en rigtig god idé at bruge DTO'er – Data Transfer Objects. Her får du en forklaring på, hvad en DTO er, hvorfor du bruger den, og hvordan du implementerer det i en .NET API.
+
+DTO står for **Data Transfer Object**, og det er en speciel klasse, du bruger til at sende data mellem din API og klienten (fx Angular frontend).
+
+### 🔹 DTO’er er ikke dine database-modeller
+DTO’er bruges til at repræsentere de data, som skal sendes ud eller ind via API'et.
+
+De kan være et udsnit af data, sammenkædede data eller tilpassede visninger, som passer til frontendens behov.
+
+## Hvorfor bruge DTO’er?
+
+### 1. Sikkerhed
+Du eksponerer kun de data, du ønsker – fx skal adgangskoder og interne felter ikke sendes til frontend.
+
+```csharp
+public class User
+{
+    public int Id { get; set; }
+    public string Username { get; set; }
+    public string PasswordHash { get; set; } // Skal ikke ud!
+}
+```
+DTO:
+```csharp
+public class UserDto
+{
+    public int Id { get; set; }
+    public string Username { get; set; }
+}
+```
+
+### 2. Fleksibilitet
+Du kan lave flere forskellige DTO’er til samme model – fx en kort version og en detaljeret.
+
+### 3. Uafhængighed af database-modellen
+Hvis du ændrer i databasen (f.eks. tilføjer nye felter), behøver du ikke ændre API'et eller frontend – DTO'en beskytter mod det.
+
+### 4. Validering og inputkontrol
+Når du modtager data (POST/PUT), kan du bruge en DTO til input, som indeholder kun de felter, brugeren skal angive – og du kan tilføje `[Required]`, `[MaxLength]` osv.
+
+## Eksempel på brug
+
+### 🎬 Model (fx i database):
+```csharp
+public class Movie
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public DateTime ReleaseDate { get; set; }
+    public decimal Budget { get; set; }
+    public bool IsDeleted { get; set; }  // Intern brug
+}
+```
+
+### DTO (output til klienten):
+```csharp
+public class MovieDto
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public string ReleaseYear { get; set; }  // Kun år, ikke dato
+}
+```
+
+### DTO (input fra klienten):
+```csharp
+public class CreateMovieDto
+{
+    [Required]
+    public string Title { get; set; }
+
+    [Required]
+    public DateTime ReleaseDate { get; set; }
+
+    public decimal Budget { get; set; }
+}
+```
+
+## 🛠Hvordan bruger man DTO'er i praksis?
+
+Typisk i controlleren:
+```csharp
+[HttpPost]
+public async Task<IActionResult> CreateMovie(CreateMovieDto dto)
+{
+    var movie = new Movie
+    {
+        Title = dto.Title,
+        ReleaseDate = dto.ReleaseDate,
+        Budget = dto.Budget
+    };
+
+    await _movieRepository.AddAsync(movie);
+    return Ok();
+}
+```
+
+Til output:
+```csharp
+[HttpGet("{id}")]
+public async Task<ActionResult<MovieDto>> GetMovie(int id)
+{
+    var movie = await _movieRepository.GetByIdAsync(id);
+    if (movie == null) return NotFound();
+
+    var dto = new MovieDto
+    {
+        Id = movie.Id,
+        Title = movie.Title,
+        ReleaseYear = movie.ReleaseDate.Year.ToString()
+    };
+
+    return Ok(dto);
+}
+```
+
+## Bonus: Brug AutoMapper
+Hvis du har mange felter og mange DTO’er, kan du bruge [AutoMapper](https://automapper.org/) til automatisk at konvertere mellem model og DTO:
+```csharp
+var dto = _mapper.Map<MovieDto>(movie);
+```
+
+## Konklusion
+
+| Fordel        | Beskrivelse                                      |
+|---------------|--------------------------------------------------|
+| **Sikkerhed** | Skjul interne felter som passwords, IsDeleted    |
+| **Fleksibilitet** | Returnér kun de data, som frontend har brug for |
+| **Validering** | DTO’er kan bruges til at validere input         |
+| **Fremtidssikret** | Din API kan ændres uden at frontend går i stykker |
+
