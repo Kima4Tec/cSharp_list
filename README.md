@@ -22,7 +22,8 @@
 18. [Data Transfer Objects](#dto)
 19. [Automapper](#automapper)
 20. [JWT](#jwt)
-21. [BScript](#bscript)
+21. [Bcrypt](#bcrypt)
+22. [Models](#models)
 
 
 
@@ -995,4 +996,9 @@ dotnet add package BCrypt.Net-Next
 
 ### Link
 [Bcrypt.Net-Next på NuGet](https://www.nuget.org/packages/BCrypt.Net-Next)
+
+
+---
+[Home](#indholdsfortegnelse)
+## Models
 
