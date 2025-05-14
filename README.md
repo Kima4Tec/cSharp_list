@@ -19,6 +19,7 @@
 15. [Encapsulation](#encapsulation)
 16. [ICollection](#icollection)
 17. [Repository og interface](#repository-og-interface)
+18. [Data Transfer Objects](#dto)
 
 
 
