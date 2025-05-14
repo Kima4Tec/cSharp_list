@@ -68,7 +68,7 @@ public class Cat : Animal
     }
 }
 ```
-
+[Home](#indholdsfortegnelse)
 ### Dependency Injection og interfaces
 
 ```csharp
