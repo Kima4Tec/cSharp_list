@@ -21,6 +21,7 @@
 17. [Repository og interface](#repository-og-interface)
 18. [Data Transfer Objects](#dto)
 19. [Automapper](#automapper)
+20. [JWT](#jwt)
 
 
 
@@ -759,7 +760,7 @@ Hvis du har mange felter og mange DTO’er, kan du bruge [AutoMapper](https://au
 var dto = _mapper.Map<MovieDto>(movie);
 ```
 
-## Konklusion
+## Opsummering
 
 | Fordel        | Beskrivelse                                      |
 |---------------|--------------------------------------------------|
@@ -873,4 +874,80 @@ public class MovieController : ControllerBase
 | **Minimerer fejl**  | Undgår manuelle tastefejl i mapping                      |
 | **Nem at vedligeholde** | Ændringer i model eller DTO kræver kun ændring ét sted |
 | **Støtter avanceret mapping** | Kan håndtere konverteringer, betingelser, navneændringer osv. |
+
+
+---
+[Home](#indholdsfortegnelse)
+## JWT?
+
+JWT står for **JSON Web Token**. Det er en standard til at sende oplysninger mellem to parter som et **signeret token** i JSON-format. Det bruges typisk til **autentificering og autorisation** i web-API'er.
+
+---
+
+## Struktur af et JWT-token
+
+Et JWT-token består af tre dele, adskilt af punktummer:
+
+header.payload.signature
+
+### Eksempel:
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+eyJ1c2VySWQiOiIxMjM0IiwibmFtZSI6IkFkbWluIn0.
+s3cr3tS1gn4tur3
+
+
+---
+
+## Hvordan virker JWT i et API?
+
+1. **Login**:
+   - Klienten sender brugernavn og adgangskode til API'et.
+   - Hvis login er korrekt, genererer serveren et JWT-token og returnerer det til klienten.
+
+2. **Brug af token**:
+   - Klienten gemmer JWT-token (typisk i lokal storage).
+   - Ved efterfølgende API-kald sendes token med som header:
+     ```
+     Authorization: Bearer <token>
+     ```
+
+3. **Validering**:
+   - Serveren validerer signaturen og evt. udløbstid.
+   - Hvis token er gyldigt, får klienten adgang.
+
+---
+
+## Fordele ved JWT
+
+- **Stateless**: Serveren behøver ikke gemme sessionsdata.
+- **Skalerbart**: Let at bruge i distribuerede systemer.
+- **Sikkert**: Brug af hemmeligheder og digitale signaturer.
+
+---
+
+## Eksempel på brug i .NET
+
+```csharp
+// Generering af token i AuthService
+var tokenHandler = new JwtSecurityTokenHandler();
+var key = Encoding.ASCII.GetBytes("your_secret_key");
+var tokenDescriptor = new SecurityTokenDescriptor
+{
+    Subject = new ClaimsIdentity(new Claim[]
+    {
+        new Claim(ClaimTypes.Name, user.UserName),
+        new Claim(ClaimTypes.Role, "Admin")
+    }),
+    Expires = DateTime.UtcNow.AddHours(1),
+    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+};
+
+var token = tokenHandler.CreateToken(tokenDescriptor);
+return tokenHandler.WriteToken(token);
+
+```
+JWT er en effektiv og sikker måde at håndtere autentificering i moderne web-API'er. Det giver en enkel metode til at overføre brugerinformation på en pålidelig måde.
+
+
 
