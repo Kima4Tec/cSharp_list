@@ -6,25 +6,26 @@
 2. [Automapper](#automapper)  
 3. [Bcrypt](#bcrypt)  
 4. [Clean Code](#clean-code)  
-5. [Code First](#code-first)  
-6. [Data Transfer Objects](#dto)  
-7. [Defensive Coding](#defensive-coding)  
-8. [Design Patterns](#design-patterns)  
-9. [Domain Driven Design (DDD)](#domain-driven-design-ddd)  
-10. [Entity](#entity)  
-11. [Encapsulation](#encapsulation)  
-12. [Fluent Api](#fluent-api)  
-13. [Forretningsobjekt](#forretningsobjekt)  
-14. [ICollection](#icollection)  
-15. [Iterative Agile](#iterative-agile)  
-16. [JWT](#jwt)  
-17. [Klasser](#klasser)  
-18. [Models](#models)  
-19. [Objekt](#objekt)  
-20. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
-21. [Repository og interface](#repository-og-interface)  
-22. [Separation of Concerns](#separation-of-concerns)  
-23. [.NET Apps](#net-apps)
+5. [Code First](#code-first)
+6. [Controllers](#controllers)  
+7. [Data Transfer Objects](#dto)  
+8. [Defensive Coding](#defensive-coding)  
+9. [Design Patterns](#design-patterns)  
+10. [Domain Driven Design (DDD)](#domain-driven-design-ddd)  
+11. [Entity](#entity)  
+12. [Encapsulation](#encapsulation)  
+13. [Fluent Api](#fluent-api)  
+14. [Forretningsobjekt](#forretningsobjekt)  
+15. [ICollection](#icollection)  
+16. [Iterative Agile](#iterative-agile)  
+17. [JWT](#jwt)  
+18. [Klasser](#klasser)  
+19. [Models](#models)  
+20. [Objekt](#objekt)  
+21. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
+22. [Repository og interface](#repository-og-interface)  
+23. [Separation of Concerns](#separation-of-concerns)  
+24. [.NET Apps](#net-apps)
 
 
 
@@ -1165,4 +1166,95 @@ Dette definerer en én-til-mange-relation mellem `Author` og `Book`.
 ### Konklusion
 
 Fluent API er nødvendigt, når du skal have **fuld kontrol** over, hvordan dine entiteter kortlægges til databasen. Det er kraftfuldt, fleksibelt og ofte uundværligt i større projekter eller avancerede databasedesigns.
+
+---
+[Home](#indholdsfortegnelse)
+# Controllers
+
+## 🎯 Hvad er en Controller?
+
+En **Controller** i ASP.NET Core er en central del af **MVC (Model-View-Controller)**-designmønstret og fungerer som en **formidler** mellem brugerens input og applikationens logik. Controlleren **modtager HTTP-anmodninger**, behandler dem og returnerer **svar (response)** til brugeren, ofte i form af **HTML, JSON** eller **XML**.
+
+### Rolle og Ansvar
+
+### 1. **Modtager HTTP-anmodninger**
+Controlleren håndterer indgående HTTP-anmodninger fra klienter (for eksempel browsere). Den bestemmer, hvordan anmodningen skal behandles baseret på ruten og den anmodede URL.
+
+### 2. **Behandler Anmodningen**
+Controlleren kan interagere med **services**, **repositories** eller **databasen** for at hente eller opdatere data. Den kan også validere input og anvende forretningslogik.
+
+### 3. **Sender et Svar (Response)**
+Controlleren sender et **svar** tilbage til klienten. Dette svar kan være:
+- En **HTML-side** (i en MVC-applikation)
+- Et **JSON-objekt** (i en API-applikation)
+- En **fil**, f.eks. en CSV eller et billede.
+
+### Struktur af en Controller
+
+En controller består typisk af:
+- **Action Methods**: Metoder, der svarer på HTTP-anmodninger som GET, POST, PUT, DELETE osv.
+- **Dependency Injection**: Controlleren bruger typisk afhængigheder (services, repositories) via dependency injection for at undgå tæt kobling.
+- **Attributter**: Brug af attributter som `[HttpGet]`, `[HttpPost]`, `[Route]` hjælper med at specificere, hvordan controlleren håndterer anmodninger.
+
+### Eksempel på Controller
+
+Her er et simpelt eksempel på en controller i en API-applikation:
+
+```csharp
+using Microsoft.AspNetCore.Mvc;
+using MyApplication.Models;
+using MyApplication.Repositories;
+
+namespace MyApplication.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class BooksController : ControllerBase
+    {
+        private readonly IBookRepository _bookRepository;
+
+        // Constructor Injection
+        public BooksController(IBookRepository bookRepository)
+        {
+            _bookRepository = bookRepository;
+        }
+
+        // GET api/books
+        [HttpGet]
+        public ActionResult<IEnumerable<Book>> GetBooks()
+        {
+            var books = _bookRepository.GetAllBooks();
+            return Ok(books);
+        }
+
+        // POST api/books
+        [HttpPost]
+        public ActionResult CreateBook([FromBody] Book newBook)
+        {
+            _bookRepository.AddBook(newBook);
+            return CreatedAtAction(nameof(GetBooks), new { id = newBook.BookId }, newBook);
+        }
+    }
+}
+```
+
+### Forklaring:
+- **`[Route("api/[controller]")]`**: Definerer, hvordan ruten til controlleren ser ud. `[controller]` erstattes med controllerens navn (i dette tilfælde `Books`).
+- **`[ApiController]`**: Angiver, at controlleren er en API-controller og automatisk håndterer nogle almindelige opgaver som automatisk modelbinding og validering.
+- **`ActionResult`**: En type, der definerer svaret på anmodningen, f.eks. `Ok()`, `CreatedAtAction()` eller `NotFound()`.
+
+### Best Practices
+
+1. **Adskillelse af ansvar**: Controlleren bør ikke indeholde forretningslogik. Den bør bruge services eller repositories til at udføre forretningslogik.
+2. **Slim controllers**: Hold controlleren så enkel som muligt. Brug tjenester (services) til at håndtere komplekse operationer.
+3. **Standard HTTP-statuskoder**: Sørg for, at din controller returnerer passende HTTP-statuskoder som 200 (OK), 201 (Created), 400 (Bad Request), 404 (Not Found), 500 (Internal Server Error).
+4. **Afhængighedsinjektion**: Brug afhængighedsinjektion til at få adgang til de nødvendige tjenester, så controlleren er løs koblet og lettere at teste.
+
+### Sammenfatning
+
+- En **Controller** håndterer **HTTP-anmodninger**, interagerer med **services** eller **databasen** og sender et **svar** tilbage til klienten.
+- I en **API**-applikation er controlleren ansvarlig for at returnere **data** i form af JSON eller andre formater.
+- Det er vigtigt at følge **best practices** for at holde controlleren **slank** og ansvarlig kun for routing og simpel datahåndtering.
+
+
 
