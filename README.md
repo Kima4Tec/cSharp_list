@@ -494,7 +494,8 @@ ICollection<T> giver dig mulighed for at:
 - Rydde hele samlingen (Clear)
 - Iterere over elementer (foreach, fordi den arver IEnumerable<T>)
 
-🧱 Hvad bruger man det til?
+
+Hvad bruger man det til?
 Typisk bruger man ICollection<T> som property type i modeller, især i Entity Framework, når der er relationer mellem objekter.
 
 Eksempel:
@@ -523,7 +524,7 @@ public class Book
 
 Her bruges ICollection<Book> til at vise, at en Author kan have flere Book-objekter.
 
-🧠 Hvorfor ikke bare List<T>?
+Hvorfor ikke bare List<T>?
 Abstraktion: ICollection<T> giver fleksibilitet – man er ikke bundet til én konkret type som List<T>.
 
 Testbarhed: Det er lettere at udskifte implementation i tests.
