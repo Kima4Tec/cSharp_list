@@ -20,6 +20,7 @@
 16. [ICollection](#icollection)
 17. [Repository og interface](#repository-og-interface)
 18. [Data Transfer Objects](#dto)
+19. [Automapper](#automapper)
 
 
 
@@ -766,4 +767,112 @@ var dto = _mapper.Map<MovieDto>(movie);
 | **Fleksibilitet** | Returnér kun de data, som frontend har brug for |
 | **Validering** | DTO’er kan bruges til at validere input         |
 | **Fremtidssikret** | Din API kan ændres uden at frontend går i stykker |
+
+
+---
+
+[Home](#indholdsfortegnelse)
+## AutoMapper i .NET
+
+**AutoMapper** er et populært bibliotek i .NET, der hjælper dig med at **automatisk konvertere mellem to objekter**, typisk mellem:
+
+- **Model** (din database- eller domæneklasse)  
+- **DTO** (Data Transfer Object til brug i API)
+
+---
+
+## 🔄 Hvorfor bruge AutoMapper?
+
+Når du har mange felter, og du skal **oversætte data frem og tilbage** mellem fx `Movie` og `MovieDto`, bliver det hurtigt kedeligt og fejlbehæftet at skrive dette manuelt:
+
+```csharp
+var dto = new MovieDto
+{
+    Id = movie.Id,
+    Title = movie.Title,
+    ReleaseYear = movie.ReleaseDate.Year.ToString()
+};
+```
+
+AutoMapper kan gøre det for dig automatisk – med én linje:
+
+```csharp
+var dto = _mapper.Map<MovieDto>(movie);
+```
+
+---
+
+## 🛠️ Sådan bruger du AutoMapper
+
+### 1. Installer AutoMapper
+
+Installer pakken i dit .NET API-projekt:
+
+```bash
+dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection
+```
+
+---
+
+### 2. Opret en Mapping-profil
+
+```csharp
+using AutoMapper;
+
+public class MappingProfile : Profile
+{
+    public MappingProfile()
+    {
+        CreateMap<Movie, MovieDto>()
+            .ForMember(dest => dest.ReleaseYear, opt => opt.MapFrom(src => src.ReleaseDate.Year.ToString()));
+
+        CreateMap<CreateMovieDto, Movie>();
+    }
+}
+```
+
+---
+
+### 3. Registrér AutoMapper i `Program.cs`
+
+```csharp
+builder.Services.AddAutoMapper(typeof(Program));
+```
+
+---
+
+### 4. Brug det i din controller eller service
+
+```csharp
+public class MovieController : ControllerBase
+{
+    private readonly IMapper _mapper;
+
+    public MovieController(IMapper mapper)
+    {
+        _mapper = mapper;
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<MovieDto>> GetMovie(int id)
+    {
+        var movie = await _movieRepository.GetByIdAsync(id);
+        if (movie == null) return NotFound();
+
+        var dto = _mapper.Map<MovieDto>(movie);
+        return Ok(dto);
+    }
+}
+```
+
+---
+
+## 🎯 Fordele ved AutoMapper
+
+| Fordel              | Beskrivelse                                               |
+|---------------------|-----------------------------------------------------------|
+| **Reducerer kode**  | Slipper for at skrive og vedligeholde ensformet kode     |
+| **Minimerer fejl**  | Undgår manuelle tastefejl i mapping                      |
+| **Nem at vedligeholde** | Ændringer i model eller DTO kræver kun ændring ét sted |
+| **Støtter avanceret mapping** | Kan håndtere konverteringer, betingelser, navneændringer osv. |
 
