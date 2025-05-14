@@ -98,7 +98,7 @@ public abstract class Animal
 ```
 
 ---
-
+[Home](#indholdsfortegnelse)
 ## Clean Code
 
 Principper for læsbar og vedligeholdelsesvenlig kode:
@@ -114,7 +114,7 @@ Principper for læsbar og vedligeholdelsesvenlig kode:
 | Single Responsibility  | En klasse/metode = én opgave |
 
 ---
-
+[Home](#indholdsfortegnelse)
 ## Defensive Coding
 
 Skriv kode der forventer fejl og beskytter sig selv:
@@ -141,7 +141,7 @@ Iterativ og Agile udvikling handler om:
 **Eksempel:** Start med brugeroversigt → Tilføj søgning i næste iteration → Tilføj brugeroprettelse bagefter.
 
 ---
-
+[Home](#indholdsfortegnelse)
 ## API
 
 Et C# API (typisk ASP.NET Core) udstiller funktionalitet via HTTP:
@@ -181,7 +181,7 @@ Genanvendelige løsninger på velkendte problemer:
 - **Repository:** Abstraktion over databaseadgang
 
 ---
-
+[Home](#indholdsfortegnelse)
 ## Domain Driven Design (DDD)
 
 Fokuser på forretningsdomænet og bygg din applikation derfra.
@@ -199,7 +199,7 @@ Fokuser på forretningsdomænet og bygg din applikation derfra.
 **Fordele:** Klar logik, tæt kobling til virkeligheden, skalerbar kodebase.
 
 ---
-
+[Home](#indholdsfortegnelse)
 ## .NET Apps
 
 Typer af .NET apps:
@@ -214,7 +214,7 @@ Typer af .NET apps:
 | Cloud Apps   | Kør i skyen                      | Azure + .NET      |
 
 ---
-
+[Home](#indholdsfortegnelse)
 ## Klasser
 
 En klasse i C# har:
@@ -274,8 +274,8 @@ Opsummering
 
 ---  
 
-
-# Objekt
+[Home](#indholdsfortegnelse)
+## Objekt
 
 I C# er et objekt en instans af en klasse – det vil sige, at det er et konkret stykke data, der er oprettet ud fra en skabelon (klassen). Objekter indeholder felter (data) og metoder (funktioner), som man kan bruge til at repræsentere og arbejde med virkelige ting.
 
@@ -331,7 +331,9 @@ class Program
 - Du opretter objekter med `new`
 - Objekter bruges til at repræsentere virkelige ting i koden
 
-# Entity
+---
+[Home](#indholdsfortegnelse)
+## Entity
 
 En Entity er en objektorienteret repræsentation af et forretningsobjekt. Det har typisk en unik identitet og bruges ofte i forbindelse med ORM som Entity Framework.
 
@@ -392,7 +394,11 @@ public class Order
 - Entity er en forretningsenhed med unik identitet
 - Bruges med ORM som Entity Framework
 
-# Forretningsobjekt
+
+---
+
+[Home](#indholdsfortegnelse)
+## Forretningsobjekt
 
 Et forretningsobjekt i C# er en klasse, der indeholder både data og forretningslogik og bruges til at repræsentere virkelige begreber som kunder og ordrer.
 
@@ -419,7 +425,10 @@ En tilgang i Entity Framework, hvor du starter med C#-klasser og genererer datab
 - Fuld kontrol over kode og modeller
 - Let at ændre struktur og migrere
 
-# Encapsulation
+
+---
+[Home](#indholdsfortegnelse)
+## Encapsulation
 
 Indkapsling betyder at beskytte data og give adgang gennem offentlige metoder.
 
