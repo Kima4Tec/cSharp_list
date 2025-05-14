@@ -78,7 +78,7 @@ public class Cat : Animal
 }
 ```
 [Home](#indholdsfortegnelse)
-### Dependency Injection og interfaces
+# Dependency Injection og interfaces
 
 ```csharp
 public interface IMoveStrategy
@@ -124,7 +124,7 @@ Principper for læsbar og vedligeholdelsesvenlig kode:
 
 ---
 [Home](#indholdsfortegnelse)
-## Defensive Coding
+# Defensive Coding
 
 Skriv kode der forventer fejl og beskytter sig selv:
 
