@@ -635,7 +635,7 @@ Ved at bruge repository pattern og interfaces i din API får du:
 ---
 
 [Home](#indholdsfortegnelse)
-## DTO i .NET API
+## DTO
 
 Når du laver en API, er det en rigtig god idé at bruge DTO'er – Data Transfer Objects. Her får du en forklaring på, hvad en DTO er, hvorfor du bruger den, og hvordan du implementerer det i en .NET API.
 
@@ -772,7 +772,7 @@ var dto = _mapper.Map<MovieDto>(movie);
 ---
 
 [Home](#indholdsfortegnelse)
-## AutoMapper i .NET
+## AutoMapper
 
 **AutoMapper** er et populært bibliotek i .NET, der hjælper dig med at **automatisk konvertere mellem to objekter**, typisk mellem:
 
