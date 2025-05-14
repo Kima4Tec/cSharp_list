@@ -629,8 +629,11 @@ Ved at bruge repository pattern og interfaces i din API får du:
 - Større fleksibilitet
 - Mindre afhængighed af teknologivalg (f.eks. EF Core)
 - Det er især en fordel i mellemstore til store projekter, eller når flere udviklere arbejder sammen.
-- 
 
+
+---
+
+[Home](#indholdsfortegnelse)
 ## DTO i .NET API
 
 Når du laver en API, er det en rigtig god idé at bruge DTO'er – Data Transfer Objects. Her får du en forklaring på, hvad en DTO er, hvorfor du bruger den, og hvordan du implementerer det i en .NET API.
