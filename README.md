@@ -896,6 +896,8 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 eyJ1c2VySWQiOiIxMjM0IiwibmFtZSI6IkFkbWluIn0.
 s3cr3tS1gn4tur3
 
+Her kan du tjekke JWT: 
+[JSON Web Token (JWT) Debugger](https://jwt.io/)
 
 ---
 
