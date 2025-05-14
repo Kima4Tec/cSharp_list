@@ -407,7 +407,10 @@ Et forretningsobjekt i C# er en klasse, der indeholder både data og forretnings
 - Har forretningslogik
 - Repræsenterer en enhed i systemet
 
-# Separation of Concerns
+
+---
+[Home](#indholdsfortegnelse)
+## Separation of Concerns
 
 Et designprincip, hvor hver sektion i koden har ét ansvar. Det gør koden nemmere at vedligeholde og teste.
 
@@ -417,7 +420,11 @@ Et designprincip, hvor hver sektion i koden har ét ansvar. Det gør koden nemme
 - Loose coupling
 - High cohesion
 
-# Code First
+
+---
+[Home](#indholdsfortegnelse)
+## Code First
+
 
 En tilgang i Entity Framework, hvor du starter med C#-klasser og genererer databasen derfra.
 
