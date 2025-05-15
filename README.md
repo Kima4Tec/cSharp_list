@@ -882,7 +882,10 @@ public class MovieController : ControllerBase
 | **Støtter avanceret mapping** | Kan håndtere konverteringer, betingelser, navneændringer osv. |
 
 
-Simpelt eksempel på brug af automapper:
+---  
+
+
+## Simpelt eksempel på brug af automapper:
 
 
 **Mapping C# data with AutoMapper - Complete tutorial for beginners**
