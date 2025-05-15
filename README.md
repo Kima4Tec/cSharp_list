@@ -973,6 +973,17 @@ return tokenHandler.WriteToken(token);
 JWT er en effektiv og sikker måde at håndtere autentificering i moderne web-API'er. Det giver en enkel metode til at overføre brugerinformation på en pålidelig måde.
 
 
+## I denne video vises, hvordan man kan opsætte JWT:
+
+JWT Authentication with .NET 9 🚀 Full Course with Roles, JSON Web Tokens & Refresh Tokens
+
+
+af Patrick God
+
+
+[JWT Authentication with .NET 9](https://youtu.be/6EEltKS8AwA?si=HVy8LPn0cKQq6Aqy)
+
+
 ---
 [Home](#indholdsfortegnelse)
 # Bcrypt
