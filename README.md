@@ -3,33 +3,34 @@
 
 # Indholdsfortegnelse
 1. [API](#api)  
-2. [Automapper](#automapper)  
-3. [Bcrypt](#bcrypt)  
-4. [Clean Code](#clean-code)  
-5. [Code First](#code-first)
-6. [Controllers](#controllers)
-7. [CORS (Cross-Origin Resource Sharing)](#cors)
-8. [Data Transfer Objects](#dto)  
-9. [Defensive Coding](#defensive-coding)
-10. [Dependency Injection](#dependency-injection-og-interfaces)
-11. [Design Patterns](#design-patterns)  
-12. [Domain Driven Design (DDD)](#domain-driven-design-ddd)  
-13. [Entity](#entity)  
-14. [Encapsulation](#encapsulation)  
-15. [Fluent Api](#fluent-api)  
-16. [Forretningsobjekt](#forretningsobjekt)  
-17. [ICollection](#icollection)  
-18. [Iterative Agile](#iterative-agile)  
-19. [JWT](#jwt)  
-20. [Klasser](#klasser)  
-21. [Models](#models)  
-22. [Objekt](#objekt)  
-23. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
-24. [Repository og interface](#repository-og-interface)
-25. [Scalar](#scalar)  
-26. [Separation of Concerns](#separation-of-concerns)
-27. [Services](#services)  
-28. [.NET Apps](#net-apps)
+2. [Arv (Inheritance)](#arv)  
+3. [Automapper](#automapper)  
+4. [Bcrypt](#bcrypt)  
+5. [Clean Code](#clean-code)  
+6. [Code First](#code-first)
+7. [Controllers](#controllers)
+8. [CORS (Cross-Origin Resource Sharing)](#cors)
+9. [Data Transfer Objects](#dto)  
+10. [Defensive Coding](#defensive-coding)
+11. [Dependency Injection](#dependency-injection-og-interfaces)
+12. [Design Patterns](#design-patterns)  
+13. [Domain Driven Design (DDD)](#domain-driven-design-ddd)  
+14. [Entity](#entity)  
+15. [Encapsulation](#encapsulation)  
+16. [Fluent Api](#fluent-api)  
+17. [Forretningsobjekt](#forretningsobjekt)  
+18. [ICollection](#icollection)  
+19. [Iterative Agile](#iterative-agile)  
+20. [JWT](#jwt)  
+21. [Klasser](#klasser)  
+22. [Models](#models)  
+23. [Objekt](#objekt)  
+24. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
+25. [Repository og interface](#repository-og-interface)
+26. [Scalar](#scalar)  
+27. [Separation of Concerns](#separation-of-concerns)
+28. [Services](#services)  
+29. [.NET Apps](#net-apps)
 
 
 
@@ -1660,7 +1661,137 @@ Dette sker kun, hvis `UseCors()` er korrekt konfigureret.
 - [Microsoft Docs: Enable CORS](https://learn.microsoft.com/aspnet/core/security/cors)
 - [MDN Web Docs: CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 
+
+
+
 ---
+[Home](#indholdsfortegnelse)
+# Arv
+Arv (Inheritance) i C#
+Arv er et fundamentalt koncept i objektorienteret programmering, hvor en klasse kan arve egenskaber og metoder fra en anden klasse. Den klasse, der arver, kaldes en **afledt klasse** eller **child class**, og den klasse, der arves fra, kaldes en **baseklasse** eller **parent class**.
+
+Dette gør det muligt at genbruge kode og skabe en hierarkisk struktur af klasser.
+
+### Grundlæggende syntaks
+
+```csharp
+// Baseklasse
+public class Animal
+{
+    public void Eat()
+    {
+        Console.WriteLine("Animal is eating.");
+    }
+}
+
+// Afledt klasse
+public class Dog : Animal
+{
+    public void Bark()
+    {
+        Console.WriteLine("Dog barks.");
+    }
+}
+```
+
+Her arver `Dog` klassen fra `Animal` klassen. Det betyder, at en `Dog` kan både `Eat()` (arvet fra `Animal`) og `Bark()` (sin egen metode).
+
+### Eksempel med Customer
+
+Her er en baseklasse `Customer` med egenskaber og en metode `Validate()`. Derefter fire afledte kundetyper, som kan have deres egne implementationsdetaljer:
+
+```csharp
+public abstract class Customer
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+
+    public Customer(string name, string email)
+    {
+        Name = name;
+        Email = email;
+    }
+
+    // Metode der kan overskrives i afledte klasser
+    public abstract bool Validate();
+}
+
+public class BusinessCustomer : Customer
+{
+    public string CompanyName { get; set; }
+
+    public BusinessCustomer(string name, string email, string companyName)
+        : base(name, email)
+    {
+        CompanyName = companyName;
+    }
+
+    public override bool Validate()
+    {
+        // Eksempel: tjek at firma og email ikke er tomme
+        return !string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(CompanyName);
+    }
+}
+
+public class ResidentialCustomer : Customer
+{
+    public ResidentialCustomer(string name, string email) : base(name, email) { }
+
+    public override bool Validate()
+    {
+        // Eksempel: tjek at email er udfyldt
+        return !string.IsNullOrEmpty(Email);
+    }
+}
+
+public class GovernmentCustomer : Customer
+{
+    public string GovernmentAgency { get; set; }
+
+    public GovernmentCustomer(string name, string email, string agency)
+        : base(name, email)
+    {
+        GovernmentAgency = agency;
+    }
+
+    public override bool Validate()
+    {
+        // Eksempel: tjek at agency og email er udfyldt
+        return !string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(GovernmentAgency);
+    }
+}
+
+public class EducatorCustomer : Customer
+{
+    public string InstitutionName { get; set; }
+
+    public EducatorCustomer(string name, string email, string institution)
+        : base(name, email)
+    {
+        InstitutionName = institution;
+    }
+
+    public override bool Validate()
+    {
+        // Eksempel: tjek at institution og email er udfyldt
+        return !string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(InstitutionName);
+    }
+}
+```
+
+### Opsummering
+
+| Begreb      | Beskrivelse                                         |
+|-------------|----------------------------------------------------|
+| **Baseklasse**   | Klassen som andre klasser arver fra.              |
+| **Afledt klasse** | Klassen der arver fra baseklassen.               |
+| **Arv**         | Genbrug af egenskaber og metoder fra baseklasse. |
+| **Abstract klasse** | Klasse der ikke kan instantieres, men skal arves. |
+| **Abstract metode** | Metode uden implementering, som afledte klasser SKAL implementere. |
+
+---
+
+
 
 ###  Konklusion
 
