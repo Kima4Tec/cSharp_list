@@ -1033,7 +1033,7 @@ Link til video, der forklarer om lagring af passwords:
 
 af Studying With Alex
 
-[Encryption, hashing, salting, bcrypt]([https://www.nuget.org/packages/BCrypt.Net-Next](https://youtu.be/qgpsIBLvrGY?si=zRK5TiXdCTYSV9Sn)
+[Encryption, hashing, salting, bcrypt](https://youtu.be/qgpsIBLvrGY?si=zRK5TiXdCTYSV9Sn)
 
 ---
 [Home](#indholdsfortegnelse)
