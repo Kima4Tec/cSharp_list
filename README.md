@@ -1443,6 +1443,9 @@ namespace MyApi.Controllers
 
 
 
+
+---
+[Home](#indholdsfortegnelse)
 # CORS
 CORS i ASP.NET Core API
 **CORS (Cross-Origin Resource Sharing)** er en sikkerhedsmekanisme i browsere, der begrænser hvilke domæner der må foretage HTTP-anmodninger til din API fra en anden origin (domæne, port, protokol).
