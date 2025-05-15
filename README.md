@@ -883,9 +883,17 @@ public class MovieController : ControllerBase
 
 
 Simpelt eksempel på brug af automapper:
+
+
 **Mapping C# data with AutoMapper - Complete tutorial for beginners**
+
+
 af tutorialsEU - C#
+
+
 [Mapping C# data with AutoMapper](https://youtu.be/Ijw0Q5EOqmE?si=yJwzY79JFnzoNy_K)
+
+
 ---
 [Home](#indholdsfortegnelse)
 # JWT?
