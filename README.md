@@ -1439,3 +1439,109 @@ namespace MyApi.Controllers
 - Brug [Tags("Navn")] for at organisere endpoints
 - Tilgå /scalar/v1#<tag> for direkte dokumentationslinks
 - Fungerer godt til udviklingsmiljøer og automatiseret dokumentation
+
+
+
+# CORS
+CORS i ASP.NET Core API
+**CORS (Cross-Origin Resource Sharing)** er en sikkerhedsmekanisme i browsere, der begrænser hvilke domæner der må foretage HTTP-anmodninger til din API fra en anden origin (domæne, port, protokol).
+
+
+### Eksempel:
+Et Angular-frontend på `http://localhost:4200` vil normalt få **CORS-fejl**, hvis det forsøger at kalde en API på `https://localhost:7031`, medmindre du tillader det via CORS-politik.
+
+---
+
+### Opsætning af CORS i `Program.cs`
+
+1. **Definér en CORS-politik** i `builder.Services`
+2. **Aktivér den** i pipeline med `UseCors`
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+
+// 1️⃣ Registrer CORS-politik
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Tilpas til din frontend
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+builder.Services.AddControllers();
+builder.Services.AddOpenApi(); // (valgfrit, fx til Scalar eller Swagger)
+
+var app = builder.Build();
+
+// 2️⃣ Brug CORS-politikken i middleware-pipelinen
+app.UseCors("AllowFrontend");
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+app.Run();
+```
+
+---
+
+### Typiske CORS-politikker
+
+| Situation                        | Konfiguration                                                    |
+|----------------------------------|------------------------------------------------------------------|
+| Udvikling med Angular eller React | `WithOrigins("http://localhost:4200")`                         |
+| Tillad alle domæner (ikke anbefalet i produktion) | `.AllowAnyOrigin()`                                  |
+| Begrænsede HTTP-metoder          | `.WithMethods("GET", "POST")`                                   |
+| Kun visse headers                | `.WithHeaders("Content-Type", "Authorization")`                 |
+
+---
+
+### CORS fejl du kan møde
+
+| Fejlmeddelelse i browseren                  | Forklaring |
+|---------------------------------------------|------------|
+| `has been blocked by CORS policy`          | Din API tillader ikke anmodningen fra den oprindelige origin |
+| `Response to preflight request doesn't pass access control check` | Preflight-anmodning (OPTIONS) mangler tilladelse |
+
+---
+
+### Test med frontend
+
+Når din frontend kører fra fx `http://localhost:4200` og kalder en endpoint på API’et (`https://localhost:7031/api/books`), skal API’en returnere CORS headers som:
+
+```
+Access-Control-Allow-Origin: http://localhost:4200
+```
+
+Dette sker kun, hvis `UseCors()` er korrekt konfigureret.
+
+---
+
+###  Anbefalinger
+
+- Brug kun `AllowAnyOrigin()` i udvikling
+- Brug navngivne politikker til at kontrollere CORS-strategier
+- Log fejlsvar og statuskoder i din browser og backend under debugging
+
+---
+
+### Ressourcer
+
+- [Microsoft Docs: Enable CORS](https://learn.microsoft.com/aspnet/core/security/cors)
+- [MDN Web Docs: CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+
+---
+
+###  Konklusion
+
+CORS er afgørende for at tillade frontend-applikationer at kommunikere sikkert med din backend. Med korrekt konfiguration i `Program.cs` undgår du fejlagtige blokeringer og gør din API klar til brug fra moderne SPAs som Angular, React og Vue.
+
+---
