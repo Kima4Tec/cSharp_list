@@ -23,10 +23,11 @@
 19. [Models](#models)  
 20. [Objekt](#objekt)  
 21. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
-22. [Repository og interface](#repository-og-interface)  
-23. [Separation of Concerns](#separation-of-concerns)
-24. [Services](#services)  
-25. [.NET Apps](#net-apps)
+22. [Repository og interface](#repository-og-interface)
+23. [Scalar](#scalar)  
+24. [Separation of Concerns](#separation-of-concerns)
+25. [Services](#services)  
+26. [.NET Apps](#net-apps)
 
 
 
@@ -1350,3 +1351,91 @@ Repository	Dataadgang (database-CRUD)
 
 Det gør din API robust, fleksibel og nemmere at teste og vedligeholde.
 
+
+---
+[Home](#indholdsfortegnelse)
+# Scalar
+
+`Scalar.AspNetCore` er et letvægtsalternativ til Swagger UI i ASP.NET Core. Det genererer en statisk HTML-dokumentation for dine endpoints og fungerer godt med både Controllers og Minimal APIs.
+
+---
+
+### Hvad er Scalar?
+
+- Et .NET-værktøj til dokumentation af Web APIs
+- Understøtter Controllers og Minimal APIs
+- Hurtig og statisk HTML – ingen JavaScript eller Swagger UI kræves
+- API-udtræk i OpenAPI JSON/YAML og HTML
+- Brugervenligt og let at tilføje
+
+---
+
+### Installation
+
+Tilføj pakken til dit projekt:
+
+```bash
+dotnet add package Scalar.AspNetCore
+```
+
+### Opsætning i Program.cs
+
+```csharp
+using Scalar.AspNetCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddOpenApi(); // Aktiverer Scalar metadata
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();              // Tilgængelig på /openapi.json og /openapi.yaml
+    app.MapScalarApiReference();   // Dokumentation på /scalar/v1
+}
+
+app.MapControllers();
+app.Run();
+
+```
+
+**Kør applikationen og åbn browseren til:**
+```csharp
+https://localhost:5001/scalar/v1
+```
+
+**Du kan filtrere dokumentationen via tags:**
+```csharp
+/scalar/v1#Movies
+
+```
+
+### Eksempelcontroller med tag
+
+```csharp
+using Microsoft.AspNetCore.Mvc;
+
+namespace MyApi.Controllers
+{
+    [ApiController]
+    [Route("movies")]
+    [Tags("Movies")] // <- Vigtigt for Scalar
+    public class MoviesController : ControllerBase
+    {
+        [HttpGet]
+        public IActionResult GetAll() => Ok(new[] { "Movie 1", "Movie 2" });
+
+        [HttpPost]
+        public IActionResult Create(string title) => Ok($"Created: {title}");
+    }
+}
+
+```
+
+### Opsummering
+- Scalar er et moderne alternativ til Swagger
+- Brug [Tags("Navn")] for at organisere endpoints
+- Tilgå /scalar/v1#<tag> for direkte dokumentationslinks
+- Fungerer godt til udviklingsmiljøer og automatiseret dokumentation
