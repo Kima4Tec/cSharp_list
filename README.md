@@ -113,6 +113,123 @@ public abstract class Animal
 }
 ```
 
+### 1. Hvad er Dependency Injection?
+
+Dependency Injection (DI) er en designmønster, hvor et objekt får (injectes) sine afhængigheder udefra i stedet for selv at oprette dem. Det gør koden mere fleksibel, testbar og løs koblet.
+
+**Eksempel:**
+
+Hvis en klasse `Animal` skal bruge en `IMoveStrategy` til bevægelse, så skal den ikke selv oprette en konkret `MoveStrategy`. I stedet får den strategien **indsprøjtet** udefra.
+
+### 2. Hvad er et Interface?
+
+Et interface definerer en kontrakt – altså hvilke metoder en klasse SKAL implementere.
+
+Eksempel:
+
+```csharp
+public interface IMoveStrategy
+{
+    void Move(string name);
+}
+```
+
+Her siger vi: "Enhver, der implementerer IMoveStrategy, skal kunne udføre `Move(string name)`."
+
+### 3. Implementering af interface
+
+En konkret klasse implementerer interface, fx:
+
+```csharp
+public class WalkStrategy : IMoveStrategy
+{
+    public void Move(string name)
+    {
+        Console.WriteLine($"{name} går.");
+    }
+}
+```
+
+Du kan have mange strategier – fx `FlyStrategy`, `SwimStrategy` osv.
+
+### 4. Konfiguration af DI i `Program.cs`
+
+For at bruge DI i ASP.NET Core, registrerer du dine services i `Program.cs` i containeren:
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+
+// Registrer IMoveStrategy og dens implementation
+builder.Services.AddTransient<IMoveStrategy, WalkStrategy>();
+
+var app = builder.Build();
+
+app.Run();
+```
+
+- `AddTransient<IMoveStrategy, WalkStrategy>()` betyder, at hver gang `IMoveStrategy` efterspørges, så får man en ny instans af `WalkStrategy`.
+- Du kan også bruge `AddScoped` (per HTTP-request) eller `AddSingleton` (en instans for hele appens levetid).
+
+### 5. Brug af DI i dine klasser
+
+Hvis du har en controller eller service, hvor du skal bruge `IMoveStrategy`, får du den ind via constructor:
+
+```csharp
+public class AnimalService
+{
+    private readonly IMoveStrategy _moveStrategy;
+
+    public AnimalService(IMoveStrategy moveStrategy)
+    {
+        _moveStrategy = moveStrategy;
+    }
+
+    public void MakeAnimalMove(string name)
+    {
+        _moveStrategy.Move(name);
+    }
+}
+```
+
+ASP.NET Core DI-container sørger for at sende den rigtige implementering (`WalkStrategy`) ind automatisk.
+
+### 6. Eksempel med `Animal`-klasse
+
+Hvis du har din abstrakte `Animal`-klasse som tidligere:
+
+```csharp
+public abstract class Animal
+{
+    protected string Name;
+    protected IMoveStrategy MoveStrategy;
+
+    public Animal(string name, IMoveStrategy moveStrategy)
+    {
+        Name = name;
+        MoveStrategy = moveStrategy;
+    }
+
+    public abstract void Speak();
+
+    public void Move()
+    {
+        MoveStrategy.Move(Name);
+    }
+}
+```
+
+Når du opretter en konkret `Animal` (fx `Dog`), skal du give den en `IMoveStrategy` – den kan fås via DI.
+
+### Opsummering
+
+| Begreb                  | Forklaring                                                             |
+|-------------------------|------------------------------------------------------------------------|
+| **Interface**            | Definerer en kontrakt for metoder.                                    |
+| **Implementering**       | En konkret klasse, der opfylder kontrakten fra interface.              |
+| **Dependency Injection** | Måden hvorpå konkrete implementationer gives til objekter udefra.     |
+| **Registrering i Program.cs** | Gør DI-containeren opmærksom på hvilke interfaces der matcher hvilke konkrete klasser. |  
+
+
 ---
 [Home](#indholdsfortegnelse)
 # Clean Code
