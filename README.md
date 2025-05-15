@@ -1024,9 +1024,16 @@ bool isValid = BCrypt.Net.BCrypt.Verify("MinSikreKode123!", hashedPassword);
 ### Installation (NuGet)
 dotnet add package BCrypt.Net-Next
 
-### Link
+### Link for at hente Bcrypt
 [Bcrypt.Net-Next på NuGet](https://www.nuget.org/packages/BCrypt.Net-Next)
 
+Link til video, der forklarer om lagring af passwords:
+
+## Password Storage Tier List: encryption, hashing, salting, bcrypt, and beyond
+
+af Studying With Alex
+
+[Encryption, hashing, salting, bcrypt]([https://www.nuget.org/packages/BCrypt.Net-Next](https://youtu.be/qgpsIBLvrGY?si=zRK5TiXdCTYSV9Sn)
 
 ---
 [Home](#indholdsfortegnelse)
