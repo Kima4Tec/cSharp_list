@@ -1663,6 +1663,10 @@ Dette sker kun, hvis `UseCors()` er korrekt konfigureret.
 
 
 
+###  Konklusion
+
+CORS er afgørende for at tillade frontend-applikationer at kommunikere sikkert med din backend. Med korrekt konfiguration i `Program.cs` undgår du fejlagtige blokeringer og gør din API klar til brug fra moderne SPAs som Angular, React og Vue.
+
 
 ---
 [Home](#indholdsfortegnelse)
@@ -1695,6 +1699,41 @@ public class Dog : Animal
 ```
 
 Her arver `Dog` klassen fra `Animal` klassen. Det betyder, at en `Dog` kan både `Eat()` (arvet fra `Animal`) og `Bark()` (sin egen metode).
+
+Brug af arv
+```csharp
+Dog myDog = new Dog();
+myDog.Eat();  // Metode fra baseklassen Animal
+myDog.Bark(); // Metode fra den afledte klasse Dog
+```
+
+Output:
+```csharp
+Animal is eating.
+Dog barks
+```
+
+Overriding (polymorfi)
+Hvis baseklassen har en metode, som du vil ændre i den afledte klasse, kan du bruge virtual og override:
+
+```csharp
+public class Animal
+{
+    public virtual void Speak()
+    {
+        Console.WriteLine("Animal makes a sound.");
+    }
+}
+
+public class Dog : Animal
+{
+    public override void Speak()
+    {
+        Console.WriteLine("Dog barks.");
+    }
+}
+```
+
 
 ### Eksempel med Customer
 
@@ -1792,9 +1831,3 @@ public class EducatorCustomer : Customer
 ---
 
 
-
-###  Konklusion
-
-CORS er afgørende for at tillade frontend-applikationer at kommunikere sikkert med din backend. Med korrekt konfiguration i `Program.cs` undgår du fejlagtige blokeringer og gør din API klar til brug fra moderne SPAs som Angular, React og Vue.
-
----
