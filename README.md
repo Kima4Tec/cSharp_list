@@ -2013,7 +2013,7 @@ public class BooksController : ControllerBase
 
 **Eksempel**
 
-**kode i controller**
+**Endpoint i controller**
 ```csharp
 [HttpGet]
 public async Task<ActionResult<IEnumerable<BookDto>>> GetAllBooks()
@@ -2023,7 +2023,7 @@ public async Task<ActionResult<IEnumerable<BookDto>>> GetAllBooks()
 }
 
 ```
-
+**Flowchart**
 ```bash
 [Client: Angular App]
         │
@@ -2072,6 +2072,16 @@ JSON Response ←-----------------------------┘
 [Client: Angular] ← Vis liste over bøger
 
 ```
+
+| Lag            | Beskrivelse                                 |
+| -------------- | ------------------------------------------- |
+| **Client**     | Angular frontend, sender HTTP GET-anmodning |
+| **Controller** | Håndterer HTTP og kalder service-lag        |
+| **Service**    | Forretningslogik, abstraherer repository    |
+| **Repository** | Kommunikation med databasen via EF Core     |
+| **DbContext**  | Entity Framework adgang til database        |
+| **Database**   | Gemmer entiteter, fx i SQL Server           |
+
 
 
 ---
