@@ -20,18 +20,19 @@
 16. [Encapsulation](#encapsulation)  
 17. [Fluent Api](#fluent-api)  
 18. [Forretningsobjekt](#forretningsobjekt)  
-19. [ICollection](#icollection)  
-20. [Iterative Agile](#iterative-agile)  
-21. [JWT](#jwt)  
-22. [Klasser](#klasser)  
-23. [Models](#models)  
-24. [Objekt](#objekt)  
-25. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
-26. [Repository og interface](#repository-og-interface)
-27. [Scalar](#scalar)  
-28. [Separation of Concerns](#separation-of-concerns)
-29. [Services](#services)  
-30. [.NET Apps](#net-apps)
+19. [ICollection](#icollection)
+20. [IEnumerable<T>](#ienumerable)
+21. [Iterative Agile](#iterative-agile)  
+22. [JWT](#jwt)  
+23. [Klasser](#klasser)  
+24. [Models](#models)  
+25. [Objekt](#objekt)  
+26. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
+27. [Repository og interface](#repository-og-interface)
+28. [Scalar](#scalar)  
+29. [Separation of Concerns](#separation-of-concerns)
+30. [Services](#services)  
+31. [.NET Apps](#net-apps)
 
 
 
@@ -2086,3 +2087,89 @@ JSON Response ←-----------------------------┘
 
 ---
 [Home](#indholdsfortegnelse)
+
+
+
+# `IEnumerable
+
+# 🔍 Hvad er `IEnumerable<T>`?
+
+`IEnumerable` er et interface i C#, som repræsenterer en sekvens af elementer, som du kan iterere over med fx `foreach`.
+
+```csharp
+public interface IEnumerable
+{
+    IEnumerator GetEnumerator();
+}
+```
+
+Men ofte bruges den **generiske version**:
+
+```csharp
+public interface IEnumerable<T>
+{
+    IEnumerator<T> GetEnumerator();
+}
+```
+
+---
+
+### Hvorfor bruge `IEnumerable<T>`?
+
+- Returner en samling **uden at afsløre konkret type** (f.eks. `List<T>`, `T[]`, etc.)
+- Understøtter **lazy evaluation** (`yield return`)
+- Bruges med `foreach`, LINQ og mere
+
+---
+
+### Eksempel
+
+```csharp
+public IEnumerable<string> GetNames()
+{
+    yield return "Alice";
+    yield return "Bob";
+}
+```
+
+Dette bruger `yield return`, så elementer leveres én ad gangen ved behov.
+
+---
+
+### Anvendelse i Repositories
+
+```csharp
+public interface IBookRepository
+{
+    IEnumerable<Book> GetAllBooks();
+}
+```
+
+```csharp
+public IEnumerable<Book> GetAllBooks()
+{
+    return _context.Books.ToList();
+}
+```
+
+---
+
+### Sammenligning
+
+| Type             | Beskrivelse                                                  |
+|------------------|--------------------------------------------------------------|
+| `IEnumerable<T>` | Itererbare datastrukturer, henter data i hukommelsen         |
+| `IQueryable<T>`  | Tillader LINQ-forespørgsler, oversættes til SQL              |
+| `List<T>`        | Konkrete datastrukturer med mulighed for tilføj/slet direkte |
+
+---
+
+### Opsummering
+
+| Egenskab          | Beskrivelse                                |
+|-------------------|---------------------------------------------|
+| `IEnumerable<T>`  | Interface til iteration                     |
+| Bruges til        | `foreach`, LINQ, abstraktion                |
+| Understøtter      | Lazy loading med `yield return`             |
+| Implementeres af  | `List<T>`, `Array`, `DbSet<T>`, osv.        |
+
