@@ -2007,20 +2007,54 @@ public class BooksController : ControllerBase
 * Services samler forretningslogik
 * Repositories kan mockes i tests
 
+**Eksempel**
 
-graph TD
+```bash
+[Client: Angular App]
+        │
+        ▼
+HTTP GET Request: /api/books
+        │
+        ▼
+[BooksController.cs] ───────────────────────┐
+    public async GetAllBooks()              │
+        │                                   │
+        ▼                                   │
+[IBookService.cs / BookService.cs]          │
+    public async GetAllBooksAsync()         │
+        │                                   │
+        ▼                                   │
+[IBookRepository.cs / BookRepository.cs]    │
+    public async GetAllAsync()              │
+        │                                   │
+        ▼                                   │
+[DbContext (EF Core)]                       │
+    Books.ToListAsync()                     │
+        │                                   │
+        ▼                                   │
+[Database: SQL Server / SQLite / etc.]      │
+    -- Henter alle bøger --                 │
+        │                                   │
+        ▼                                   │
+[DbContext] ← Resultater                    │
+        │                                   │
+        ▼                                   │
+[BookRepository] ← Entity list              │
+        │                                   │
+        ▼                                   │
+[BookService] ← Entity list                 │
+        │                                   │
+        ▼                                   │
+DTO Mapping (f.eks. AutoMapper)             │
+        │                                   │
+        ▼                                   │
+[BooksController] ← DTO list                │
+        │                                   │
+        ▼                                   │
+JSON Response ←-----------------------------┘
+        │
+        ▼
+[Client: Angular] ← Vis liste over bøger
 
-A[Client: Angular App] --> B[HTTP GET /api/books]
-B --> C[BooksController.cs]
-C --> D[BookService.cs (via IBookService)]
-D --> E[BookRepository.cs (via IBookRepository)]
-E --> F[DbContext (EF Core)]
-F --> G[(Database: SQL Server)]
 
-G --> F
-F --> E
-E --> D
-D --> C
-C --> H[JSON Response]
-H --> A
----
+```
