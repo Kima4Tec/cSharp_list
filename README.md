@@ -2007,7 +2007,22 @@ public class BooksController : ControllerBase
 * Services samler forretningslogik
 * Repositories kan mockes i tests
 
+
+---
+
+
 **Eksempel**
+
+**kode i controller**
+```csharp
+[HttpGet]
+public async Task<ActionResult<IEnumerable<BookDto>>> GetAllBooks()
+{
+    var books = await _bookService.GetAllBooksAsync();
+    return Ok(books);
+}
+
+```
 
 ```bash
 [Client: Angular App]
@@ -2056,5 +2071,8 @@ JSON Response ←-----------------------------┘
         ▼
 [Client: Angular] ← Vis liste over bøger
 
-
 ```
+
+
+---
+[Home](#indholdsfortegnelse)
