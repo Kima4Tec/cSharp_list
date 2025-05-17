@@ -2007,4 +2007,20 @@ public class BooksController : ControllerBase
 * Services samler forretningslogik
 * Repositories kan mockes i tests
 
+
+graph TD
+
+A[Client: Angular App] --> B[HTTP GET /api/books]
+B --> C[BooksController.cs]
+C --> D[BookService.cs (via IBookService)]
+D --> E[BookRepository.cs (via IBookRepository)]
+E --> F[DbContext (EF Core)]
+F --> G[(Database: SQL Server)]
+
+G --> F
+F --> E
+E --> D
+D --> C
+C --> H[JSON Response]
+H --> A
 ---
