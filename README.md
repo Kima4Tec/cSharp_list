@@ -2,35 +2,36 @@
 # C# Noter
 
 # Indholdsfortegnelse
-1. [API](#api)  
-2. [Arv (Inheritance)](#arv)  
-3. [Automapper](#automapper)  
-4. [Bcrypt](#bcrypt)  
-5. [Clean Code](#clean-code)  
-6. [Code First](#code-first)
-7. [Controllers](#controllers)
-8. [CORS (Cross-Origin Resource Sharing)](#cors)
-9. [Data Transfer Objects](#dto)  
-10. [Defensive Coding](#defensive-coding)
-11. [Dependency Injection](#dependency-injection-og-interfaces)
-12. [Design Patterns](#design-patterns)  
-13. [Domain Driven Design (DDD)](#domain-driven-design-ddd)  
-14. [Entity](#entity)  
-15. [Encapsulation](#encapsulation)  
-16. [Fluent Api](#fluent-api)  
-17. [Forretningsobjekt](#forretningsobjekt)  
-18. [ICollection](#icollection)  
-19. [Iterative Agile](#iterative-agile)  
-20. [JWT](#jwt)  
-21. [Klasser](#klasser)  
-22. [Models](#models)  
-23. [Objekt](#objekt)  
-24. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
-25. [Repository og interface](#repository-og-interface)
-26. [Scalar](#scalar)  
-27. [Separation of Concerns](#separation-of-concerns)
-28. [Services](#services)  
-29. [.NET Apps](#net-apps)
+1. [API](#api)
+2. [Arkitektur: Models, DTOs, Controllers, Interfaces, Repositories, Services og AutoMapper](#arkitektur)
+3. [Arv (Inheritance)](#arv)  
+4. [Automapper](#automapper)  
+5. [Bcrypt](#bcrypt)  
+6. [Clean Code](#clean-code)  
+7. [Code First](#code-first)
+8. [Controllers](#controllers)
+9. [CORS (Cross-Origin Resource Sharing)](#cors)
+10. [Data Transfer Objects](#dto)  
+11. [Defensive Coding](#defensive-coding)
+12. [Dependency Injection](#dependency-injection-og-interfaces)
+13. [Design Patterns](#design-patterns)  
+14. [Domain Driven Design (DDD)](#domain-driven-design-ddd)  
+15. [Entity](#entity)  
+16. [Encapsulation](#encapsulation)  
+17. [Fluent Api](#fluent-api)  
+18. [Forretningsobjekt](#forretningsobjekt)  
+19. [ICollection](#icollection)  
+20. [Iterative Agile](#iterative-agile)  
+21. [JWT](#jwt)  
+22. [Klasser](#klasser)  
+23. [Models](#models)  
+24. [Objekt](#objekt)  
+25. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
+26. [Repository og interface](#repository-og-interface)
+27. [Scalar](#scalar)  
+28. [Separation of Concerns](#separation-of-concerns)
+29. [Services](#services)  
+30. [.NET Apps](#net-apps)
 
 
 
@@ -1830,4 +1831,179 @@ public class EducatorCustomer : Customer
 
 ---
 
+# Arkitektur: Models, DTOs, Controllers, Interfaces, Repositories, Services og AutoMapper
 
+###  Overblik
+
+En typisk .NET Core-applikation bruger en lagdelt arkitektur for at adskille ansvar og forbedre vedligeholdelse.
+
+* Models
+* DTOs (Data Transfer Objects)
+* Controllers
+* Interfaces
+* Repositories
+* Services
+* AutoMapper
+
+---
+
+### 1. Model (Domain Model / Entity)
+
+**Hvad:**
+
+* Repræsenterer database-objekter
+* Bruges af Entity Framework Core til at binde til databasen
+
+**Eksempel:**
+
+```csharp
+public class Book
+{
+    public int BookId { get; set; }
+    public string Title { get; set; }
+    public Author Author { get; set; }
+    public Cover? Cover { get; set; }
+}
+```
+
+---
+
+### 2. DTO (Data Transfer Object)
+
+**Hvad:**
+
+* Brugerdefineret dataformat til frontend
+* Indeholder kun relevante felter
+* Beskytter domænemodellen og letter versionering
+
+**Eksempel:**
+
+```csharp
+public class BookDto
+{
+    public string Title { get; set; }
+    public string AuthorFullName { get; set; }
+}
+```
+
+---
+
+### 3. AutoMapper
+
+**Hvad:**
+
+* Automatiserer konvertering mellem Models og DTOs
+
+**Eksempel:**
+
+```csharp
+CreateMap<Book, BookDto>()
+    .ForMember(dest => dest.AuthorFullName,
+               opt => opt.MapFrom(src => src.Author.FirstName + " " + src.Author.LastName));
+```
+
+---
+
+### 4. Repository (Data Access Layer)
+
+**Hvad:**
+
+* Håndterer databasekommunikation
+* Returnerer models
+* Bruger interfaces for testbarhed
+
+**Eksempel:**
+
+```csharp
+public interface IBookRepository
+{
+    Task<List<Book>> GetAllAsync();
+    Task<Book?> GetByIdAsync(int id);
+}
+```
+
+---
+
+### 5. Service (Business Logic Layer)
+
+**Hvad:**
+
+* Indeholder forretningsregler
+* Kalder repositories og bruger AutoMapper
+
+**Eksempel:**
+
+```csharp
+public class BookService : IBookService
+{
+    private readonly IBookRepository _repo;
+    private readonly IMapper _mapper;
+
+    public async Task<List<BookDto>> GetAllBooksAsync()
+    {
+        var books = await _repo.GetAllAsync();
+        return _mapper.Map<List<BookDto>>(books);
+    }
+}
+```
+
+---
+
+### 6. Controller (API Layer)
+
+**Hvad:**
+
+* Ekspornerer endpoints til frontend
+* Kalder services og returnerer DTOs som JSON
+
+**Eksempel:**
+
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class BooksController : ControllerBase
+{
+    private readonly IBookService _service;
+
+    [HttpGet]
+    public async Task<ActionResult<List<BookDto>>> GetAll()
+    {
+        var books = await _service.GetAllBooksAsync();
+        return Ok(books);
+    }
+}
+```
+
+---
+
+### Sammenhæng mellem lag
+
+```
+[Frontend]
+   ↓ (HTTP Request)
+[Controller]             <--- Kalder services
+   ↓
+[Service]                <--- Indeholder logik og bruger AutoMapper
+   ↓
+[Repository]             <--- Kommunikerer med database
+   ↓
+[DbContext]              <--- EF Core
+   ↑
+[Model]                  <--- Domænemodel
+
+   ↓
+[AutoMapper]             <--- Mapper Model → DTO
+   ↓
+[DTO]                    <--- Returneres som JSON til frontend
+```
+
+---
+
+### Fordele
+
+* Let at teste og vedligeholde
+* DTO beskytter intern struktur
+* Services samler forretningslogik
+* Repositories kan mockes i tests
+
+---
