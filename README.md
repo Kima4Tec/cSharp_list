@@ -2122,7 +2122,7 @@ public interface IEnumerable<T>
 
 ---
 
-### <T> står T for Type Parameter
+### '<T>' står T for Type Parameter
 Det betyder, at T er en generisk type, som bruges som en pladsholder for den type, du vil arbejde med. Når du bruger en generisk klasse eller metode, kan du erstatte T med hvilken som helst datatype, fx int, string, eller en brugerdefineret klasse.
 
 ---
