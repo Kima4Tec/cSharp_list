@@ -2090,9 +2090,9 @@ JSON Response ←-----------------------------┘
 
 
 
-# `IEnumerable
+# IEnumerable
 
-# 🔍 Hvad er `IEnumerable<T>`?
+### Hvad er `IEnumerable<T>`?
 
 `IEnumerable` er et interface i C#, som repræsenterer en sekvens af elementer, som du kan iterere over med fx `foreach`.
 
@@ -2173,3 +2173,7 @@ public IEnumerable<Book> GetAllBooks()
 | Understøtter      | Lazy loading med `yield return`             |
 | Implementeres af  | `List<T>`, `Array`, `DbSet<T>`, osv.        |
 
+
+
+---
+[Home](#indholdsfortegnelse)
