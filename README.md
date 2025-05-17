@@ -3,7 +3,7 @@
 
 # Indholdsfortegnelse
 1. [API](#api)
-2. [Arkitektur: Models, DTOs, Controllers, Interfaces, Repositories, Services og AutoMapper](#arkitektur)
+2. [Arkitektur: Models, DTOs, Controllers, Interfaces, Repositories, Services og AutoMapper](#arkitektur)  
 3. [Arv (Inheritance)](#arv)  
 4. [Automapper](#automapper)  
 5. [Bcrypt](#bcrypt)  
@@ -1830,8 +1830,9 @@ public class EducatorCustomer : Customer
 | **Abstract metode** | Metode uden implementering, som afledte klasser SKAL implementere. |
 
 ---
-
-# Arkitektur: Models, DTOs, Controllers, Interfaces, Repositories, Services og AutoMapper
+[Home](#indholdsfortegnelse)
+# Arkitektur   
+**Models, DTOs, Controllers, Interfaces, Repositories, Services og AutoMapper**
 
 ###  Overblik
 
