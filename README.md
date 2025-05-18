@@ -325,6 +325,9 @@ Domain-Driven Design (DDD) er en tilgang til softwareudvikling, der fokuserer p�
 - Et bibliotekssystem har domæner som "Bøger", "Udlån", "Brugere".
 - En bankapplikation har domæner som "Konti", "Transaktioner", "Kreditvurdering".
 
+
+  
+
 | Begreb            | Forklaring                             |
 |-------------------|----------------------------------------|
 | Domæne            | Fx biograf, bank, webshop              |
@@ -334,25 +337,6 @@ Domain-Driven Design (DDD) er en tilgang til softwareudvikling, der fokuserer p�
 | Repository        | Gem og hent aggregates                 |
 | Service           | Forretningslogik                       |
 | Ubiquitous Language | Samme sprog hos devs og eksperter     |
-
-**Fordele:** Klar logik, tæt kobling til virkeligheden, skalerbar kodebase.
-
-
-
----
-[Home](#indholdsfortegnelse)
-# .NET Apps
-
-Typer af .NET apps:
-
-| Type         | Beskrivelse                     | Teknologi         |
-|--------------|----------------------------------|-------------------|
-| Web Apps     | Dynamiske web/API’er             | ASP.NET Core      |
-| Desktop Apps | Windows-programmer               | WPF, WinForms     |
-| Console Apps | CLI værktøjer                    | .NET Console      |
-| Mobile Apps  | Cross-platform apps              | .NET MAUI, Xamarin|
-| Blazor Apps  | Web apps med C#                  | Blazor WebAssembly|
-| Cloud Apps   | Kør i skyen                      | Azure + .NET      |
 
 ###  Ubiquitous Language (fælles sprog)
 Et fælles sprog, der bruges af både udviklere og domæneeksperter. Dette sprog afspejles i kode (klassernavne, metoder, osv.) og hjælper med at undgå misforståelser.
@@ -402,6 +386,7 @@ Et stort system deles typisk op i flere bounded contexts.
 /API eller UI
 ```
 ### Fordele ved DDD
+Klar logik, tæt kobling til virkeligheden, skalerbar kodebase.
 - Fokus på forretningens behov
 - Klar adskillelse mellem logik og infrastruktur
 - Lettere vedligeholdelse og testbarhed
@@ -411,6 +396,22 @@ Et stort system deles typisk op i flere bounded contexts.
 DDD er ikke nødvendigt i små eller simple projekter, hvor kompleks forretningslogik ikke findes. Det giver først mening, når forretningsregler og begreber bliver komplekse.
 
 ---
+
+---
+[Home](#indholdsfortegnelse)
+# .NET Apps
+
+Typer af .NET apps:
+
+| Type         | Beskrivelse                     | Teknologi         |
+|--------------|----------------------------------|-------------------|
+| Web Apps     | Dynamiske web/API’er             | ASP.NET Core      |
+| Desktop Apps | Windows-programmer               | WPF, WinForms     |
+| Console Apps | CLI værktøjer                    | .NET Console      |
+| Mobile Apps  | Cross-platform apps              | .NET MAUI, Xamarin|
+| Blazor Apps  | Web apps med C#                  | Blazor WebAssembly|
+| Cloud Apps   | Kør i skyen                      | Azure + .NET      |
+
 [Home](#indholdsfortegnelse)
 # Klasser
 
