@@ -319,8 +319,11 @@ Genanvendelige løsninger på velkendte problemer:
 ---
 [Home](#indholdsfortegnelse)
 # Domain Driven Design (DDD)
+Domain-Driven Design (DDD) er en tilgang til softwareudvikling, der fokuserer på at designe systemet ud fra forretningens kerneområde (domæne) og dets logik. Ideen er at skabe et modeldrevet system, hvor både udviklere og domæneeksperter samarbejder om at bygge en fælles forståelse og et fælles sprog.
 
-Fokuser på forretningsdomænet og bygg din applikation derfra.
+**Et domæne er det område eller den forretningskontekst, som systemet skal understøtte. F.eks.:**
+- Et bibliotekssystem har domæner som "Bøger", "Udlån", "Brugere".
+- En bankapplikation har domæner som "Konti", "Transaktioner", "Kreditvurdering".
 
 | Begreb            | Forklaring                             |
 |-------------------|----------------------------------------|
@@ -333,6 +336,8 @@ Fokuser på forretningsdomænet og bygg din applikation derfra.
 | Ubiquitous Language | Samme sprog hos devs og eksperter     |
 
 **Fordele:** Klar logik, tæt kobling til virkeligheden, skalerbar kodebase.
+
+
 
 ---
 [Home](#indholdsfortegnelse)
@@ -348,6 +353,62 @@ Typer af .NET apps:
 | Mobile Apps  | Cross-platform apps              | .NET MAUI, Xamarin|
 | Blazor Apps  | Web apps med C#                  | Blazor WebAssembly|
 | Cloud Apps   | Kør i skyen                      | Azure + .NET      |
+
+###  Ubiquitous Language (fælles sprog)
+Et fælles sprog, der bruges af både udviklere og domæneeksperter. Dette sprog afspejles i kode (klassernavne, metoder, osv.) og hjælper med at undgå misforståelser.
+
+### Entity (Entitet)
+En genstand med en identitet, som forbliver den samme gennem tid.  
+**Eksempel:** En Bruger med `UserId`.
+
+### Value Object (Værdiobjekt)
+En genstand uden identitet. Den er defineret af sine attributter.  
+**Eksempel:** En Adresse (gade, postnummer, by).
+
+### Aggregate
+En gruppe af entiteter og værdiobjekter med en root, der styrer al adgang.  
+**Eksempel:** En Ordre kan være en aggregate med Ordrelinjer som indre objekter.
+
+### Repository
+En abstraktion til at hente og gemme aggregates fra en datakilde, uden at eksponere den underliggende database.
+
+### Service
+Indeholder forretningslogik, der ikke naturligt hører hjemme i en entitet eller et værdiobjekt.
+
+### Domain Event
+Noget vigtigt, der er sket i domænet.  
+**Eksempel:** `BookReturned` eller `UserRegistered`.
+
+### Bounded Context
+En klart afgrænset del af systemet med sit eget sprog og model.  
+Et stort system deles typisk op i flere bounded contexts.
+
+---
+
+### Et eksempel på mappestruktur
+```bash
+/Domain
+  /Entities
+  /ValueObjects
+  /Interfaces (f.eks. IBookRepository)
+  /Services
+/Application
+  /DTOs
+  /UseCases eller Commands
+/Infrastructure
+  /Repositories
+  /Database
+  /ExternalServices
+/API eller UI
+```
+### Fordele ved DDD
+- Fokus på forretningens behov
+- Klar adskillelse mellem logik og infrastruktur
+- Lettere vedligeholdelse og testbarhed
+- Forbedret kommunikation mellem udviklere og domæneeksperter
+
+### Hvornår bør man ikke bruge DDD?
+DDD er ikke nødvendigt i små eller simple projekter, hvor kompleks forretningslogik ikke findes. Det giver først mening, når forretningsregler og begreber bliver komplekse.
 
 ---
 [Home](#indholdsfortegnelse)
