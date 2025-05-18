@@ -324,8 +324,6 @@ Domain-Driven Design (DDD) er en tilgang til softwareudvikling, der fokuserer p�
 **Et domæne er det område eller den forretningskontekst, som systemet skal understøtte. F.eks.:**
 - Et bibliotekssystem har domæner som "Bøger", "Udlån", "Brugere".
 - En bankapplikation har domæner som "Konti", "Transaktioner", "Kreditvurdering".
-
-
   
 
 | Begreb            | Forklaring                             |
@@ -394,8 +392,6 @@ Klar logik, tæt kobling til virkeligheden, skalerbar kodebase.
 
 ### Hvornår bør man ikke bruge DDD?
 DDD er ikke nødvendigt i små eller simple projekter, hvor kompleks forretningslogik ikke findes. Det giver først mening, når forretningsregler og begreber bliver komplekse.
-
----
 
 ---
 [Home](#indholdsfortegnelse)
