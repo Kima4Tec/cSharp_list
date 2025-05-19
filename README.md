@@ -2339,10 +2339,12 @@ Så vil ASP.NET Core:
 - Du vil læse et objekt (fx en model eller DTO)	public IActionResult Add([FromBody] BookDto dto)
 
 ### Kontrast: [FromQuery] og [FromRoute]
-Attribut	Henter data fra ...	Eksempel i URL
-[FromBody]	Body (JSON)	POST med JSON body
-[FromQuery]	Query string	/api/books?title=abc
-[FromRoute]	URL-ruten	/api/books/123 (id=123)
+Attribut	Henter data fra ...	Typisk brug
+[FromQuery]	Query string (i URL)	GET med filtre/søgning -> fortæller ASP.NET Core, at værdien til parameteren skal læses fra URL'ens query string.
+[FromRoute]	Route-del af URL	/api/books/42
+[FromBody]	JSON i request body	POST, PUT, PATCH
+[FromHeader]	HTTP headers	Custom headers
+[FromForm]	Form-data (fx multipart)	Fil-upload
 
 **Eksempel med flere attributter**
 ```csharp
@@ -2361,3 +2363,5 @@ public IActionResult AddBook(int categoryId, [FromBody] BookDto book)
 Bruges især ved POST/PUT/PATCH
 
 Gør det muligt at automatisk binde JSON til en C#-model
+
+
