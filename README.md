@@ -2,37 +2,39 @@
 # C# Noter
 
 # Indholdsfortegnelse
-1. [API](#api)
-2. [Arkitektur: Models, DTOs, Controllers, Interfaces, Repositories, Services og AutoMapper](#arkitektur)  
-3. [Arv (Inheritance)](#arv)  
-4. [Automapper](#automapper)  
-5. [Bcrypt](#bcrypt)  
-6. [Clean Code](#clean-code)  
-7. [Code First](#code-first)
-8. [Controllers](#controllers)
-9. [CORS (Cross-Origin Resource Sharing)](#cors)
-10. [Data Transfer Objects](#dto)  
-11. [Defensive Coding](#defensive-coding)
-12. [Dependency Injection](#dependency-injection-og-interfaces)
-13. [Design Patterns](#design-patterns)  
-14. [Domain Driven Design (DDD)](#domain-driven-design-ddd)  
-15. [Entity](#entity)  
-16. [Encapsulation](#encapsulation)  
-17. [Fluent Api](#fluent-api)  
-18. [Forretningsobjekt](#forretningsobjekt)  
-19. [ICollection](#icollection)
-20. [IEnumerable<T>](#ienumerable)
-21. [Iterative Agile](#iterative-agile)  
-22. [JWT](#jwt)  
-23. [Klasser](#klasser)  
-24. [Models](#models)  
-25. [Objekt](#objekt)  
-26. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
-27. [Repository og interface](#repository-og-interface)
-28. [Scalar](#scalar)  
-29. [Separation of Concerns](#separation-of-concerns)
-30. [Services](#services)  
-31. [.NET Apps](#net-apps)
+1. [ActionResult](#actionresult)
+2. [API](#api)
+3. [Arkitektur: Models, DTOs, Controllers, Interfaces, Repositories, Services og AutoMapper](#arkitektur)  
+4. [Arv (Inheritance)](#arv)  
+5. [Automapper](#automapper)  
+6. [Bcrypt](#bcrypt)  
+7. [Clean Code](#clean-code)  
+8. [Code First](#code-first)
+9. [Controllers](#controllers)
+10. [CORS (Cross-Origin Resource Sharing)](#cors)
+11. [Data Transfer Objects](#dto)  
+12. [Defensive Coding](#defensive-coding)
+13. [Dependency Injection](#dependency-injection-og-interfaces)
+14. [Design Patterns](#design-patterns)  
+15. [Domain Driven Design (DDD)](#domain-driven-design-ddd)  
+16. [Entity](#entity)  
+17. [Encapsulation](#encapsulation)  
+18. [Fluent Api](#fluent-api)  
+19. [Forretningsobjekt](#forretningsobjekt)
+20. [FromBody](#frombody)  
+21. [ICollection](#icollection)
+22. [IEnumerable<T>](#ienumerable)
+23. [Iterative Agile](#iterative-agile)  
+24. [JWT](#jwt)  
+25. [Klasser](#klasser)  
+26. [Models](#models)  
+27. [Objekt](#objekt)  
+28. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
+29. [Repository og interface](#repository-og-interface)
+30. [Scalar](#scalar)  
+31. [Separation of Concerns](#separation-of-concerns)
+32. [Services](#services)  
+33. [.NET Apps](#net-apps)
 
 
 
@@ -2240,3 +2242,122 @@ public IEnumerable<Book> GetAllBooks()
 
 ---
 [Home](#indholdsfortegnelse)
+
+
+# ActionResult
+ActionResult er en baseklasse, som mange andre specifikke resultater (som OkResult, NotFoundResult, ViewResult, JsonResult, osv.) arver fra.
+
+### Eksempel – typiske brugsscenarier
+
+```csharp
+public class BookController : ControllerBase
+{
+    // Returnerer 200 OK med data
+    [HttpGet("{id}")]
+    public ActionResult<BookDto> GetBook(int id)
+    {
+        var book = _bookService.GetBookById(id);
+        if (book == null)
+            return NotFound(); // returnerer 404
+        return Ok(book);      // returnerer 200 + book i JSON
+    }
+
+    // Returnerer 201 Created
+    [HttpPost]
+    public ActionResult<BookDto> CreateBook(BookDto book)
+    {
+        var created = _bookService.Create(book);
+        return CreatedAtAction(nameof(GetBook), new { id = created.Id }, created);
+    }
+}
+```
+
+### Typer af ActionResult
+Her er nogle ofte brugte typer:
+
+| Resultat-type           | Beskrivelse                                   |
+|-------------------------|-----------------------------------------------|
+| `Ok()`                  | 200 OK uden data                              |
+| `Ok(object)`            | 200 OK med JSON-data                          |
+| `NotFound()`            | 404 Not Found                                 |
+| `BadRequest()`          | 400 Bad Request                               |
+| `Unauthorized()`        | 401 Unauthorized                              |
+| `NoContent()`           | 204 No Content (ofte ved DELETE)              |
+| `CreatedAtAction(...)`  | 201 Created med placering af ressource        |
+| `Forbid()`              | 403 Forbidden                                 |
+
+
+### ActionResult<T>
+Når du returnerer både et objekt og et HTTP-statuskode-resultat, bruger man typisk ActionResult<T> – som i ActionResult<BookDto>. Det gør det muligt at:
+- Returnere objektet (BookDto) med status 200
+- Eller returnere fx NotFound() hvis objektet ikke eksisterer
+- Det giver mere fleksibilitet end bare at returnere BookDto.
+
+### Hvornår skal jeg bruge ActionResult?
+**Du skal bruge det, når du vil...	Eksempel**
+- Returnere forskellige HTTP-statuskoder	200 OK, 404 Not Found, 400 Bad Request osv.
+- Returnere data i JSON	return Ok(data);
+- Returnere fejlbeskeder	return BadRequest("Invalid input");
+- Returnere ressourcer med placering (POST)	CreatedAtAction(...)
+
+
+
+---
+[Home](#indholdsfortegnelse)
+
+# FromBody
+[FromBody] fortæller ASP.NET Core, at parameterens værdi skal læses fra selve HTTP-requestens body – typisk som JSON.
+
+🔹 Eksempel
+```csharp
+[HttpPost]
+public IActionResult CreateBook([FromBody] BookDto book)
+{
+    // book er nu deserialiseret fra JSON i request body
+    _bookService.Create(book);
+    return Ok();
+}
+```
+### Hvad sker der bag kulissen?
+Når klienten sender en POST-request med JSON-data:
+
+```json
+{
+  "title": "C# for Beginners",
+  "publishYear": 2024
+}
+```
+
+Så vil ASP.NET Core:
+- Læse body'en i HTTP-requesten
+- Bruge JSON-deserialisering (via System.Text.Json eller Newtonsoft.Json)
+- Lægge resultatet ind i BookDto book
+
+### Hvornår bruger man [FromBody]?
+**Brug [FromBody] når ...	Eksempel**
+- Du sender JSON-data i POST, PUT eller PATCH	fx fra en frontend, Postman, JavaScript
+- Du vil læse et objekt (fx en model eller DTO)	public IActionResult Add([FromBody] BookDto dto)
+
+### Kontrast: [FromQuery] og [FromRoute]
+Attribut	Henter data fra ...	Eksempel i URL
+[FromBody]	Body (JSON)	POST med JSON body
+[FromQuery]	Query string	/api/books?title=abc
+[FromRoute]	URL-ruten	/api/books/123 (id=123)
+
+**Eksempel med flere attributter**
+```csharp
+[HttpPost("{categoryId}")]
+public IActionResult AddBook(int categoryId, [FromBody] BookDto book)
+{
+    // categoryId kommer fra URL (FromRoute implicit)
+    // book kommer fra JSON body (FromBody)
+    ...
+}
+```
+
+### TL;DR
+[FromBody]: Bruger JSON fra request body
+
+Bruges især ved POST/PUT/PATCH
+
+Gør det muligt at automatisk binde JSON til en C#-model
