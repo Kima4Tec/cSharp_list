@@ -18,23 +18,24 @@
 14. [Design Patterns](#design-patterns)  
 15. [Domain Driven Design (DDD)](#domain-driven-design-ddd)  
 16. [Entity](#entity)  
-17. [Encapsulation](#encapsulation)  
-18. [Fluent Api](#fluent-api)  
-19. [Forretningsobjekt](#forretningsobjekt)
-20. [FromBody](#frombody)  
-21. [ICollection](#icollection)
-22. [IEnumerable<T>](#ienumerable)
-23. [Iterative Agile](#iterative-agile)  
-24. [JWT](#jwt)  
-25. [Klasser](#klasser)  
-26. [Models](#models)  
-27. [Objekt](#objekt)  
-28. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
-29. [Repository og interface](#repository-og-interface)
-30. [Scalar](#scalar)  
-31. [Separation of Concerns](#separation-of-concerns)
-32. [Services](#services)  
-33. [.NET Apps](#net-apps)
+17. [Encapsulation](#encapsulation)
+18. [FAQ](#faq)  
+19. [Fluent Api](#fluent-api)  
+20. [Forretningsobjekt](#forretningsobjekt)
+21. [FromBody](#frombody)  
+22. [ICollection](#icollection)
+23. [IEnumerable<T>](#ienumerable)
+24. [Iterative Agile](#iterative-agile)  
+25. [JWT](#jwt)  
+26. [Klasser](#klasser)  
+27. [Models](#models)  
+28. [Objekt](#objekt)  
+29. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
+30. [Repository og interface](#repository-og-interface)
+31. [Scalar](#scalar)  
+32. [Separation of Concerns](#separation-of-concerns)
+33. [Services](#services)  
+34. [.NET Apps](#net-apps)
 
 
 
@@ -2359,6 +2360,15 @@ public IActionResult AddBook(int categoryId, [FromBody] BookDto book)
 
 ### TL;DR
 [FromBody]: Bruger JSON fra request body
+
+
+# FAQ
+´´´
+Fejl: "System.Security.Cryptography.ProtectedData.dll" ... Exceeded retry count of 10. Failed.
+´´´
+
+Kan forekomme, hvis Visual Studio køres fra OneDrive
+
 
 Bruges især ved POST/PUT/PATCH
 
