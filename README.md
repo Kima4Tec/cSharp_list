@@ -2363,8 +2363,11 @@ public IActionResult AddBook(int categoryId, [FromBody] BookDto book)
 
 
 # FAQ
-´´´
+
+´´´csharp
+
 Fejl: "System.Security.Cryptography.ProtectedData.dll" ... Exceeded retry count of 10. Failed.
+
 ´´´
 
 Kan forekomme, hvis Visual Studio køres fra OneDrive
