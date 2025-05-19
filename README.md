@@ -7,35 +7,36 @@
 3. [Arkitektur: Models, DTOs, Controllers, Interfaces, Repositories, Services og AutoMapper](#arkitektur)  
 4. [Arv (Inheritance)](#arv)  
 5. [Automapper](#automapper)  
-6. [Bcrypt](#bcrypt)  
-7. [Clean Code](#clean-code)  
-8. [Code First](#code-first)
-9. [Controllers](#controllers)
-10. [CORS (Cross-Origin Resource Sharing)](#cors)
-11. [Data Transfer Objects](#dto)  
-12. [Defensive Coding](#defensive-coding)
-13. [Dependency Injection](#dependency-injection-og-interfaces)
-14. [Design Patterns](#design-patterns)  
-15. [Domain Driven Design (DDD)](#domain-driven-design-ddd)  
-16. [Entity](#entity)  
-17. [Encapsulation](#encapsulation)
-18. [FAQ](#faq)  
-19. [Fluent Api](#fluent-api)  
-20. [Forretningsobjekt](#forretningsobjekt)
-21. [FromBody](#frombody)  
-22. [ICollection](#icollection)
-23. [IEnumerable<T>](#ienumerable)
-24. [Iterative Agile](#iterative-agile)  
-25. [JWT](#jwt)  
-26. [Klasser](#klasser)  
-27. [Models](#models)  
-28. [Objekt](#objekt)  
-29. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
-30. [Repository og interface](#repository-og-interface)
-31. [Scalar](#scalar)  
-32. [Separation of Concerns](#separation-of-concerns)
-33. [Services](#services)  
-34. [.NET Apps](#net-apps)
+6. [Bcrypt](#bcrypt)
+7. [ChangeTracker i EF](#changetracker)
+8. [Clean Code](#clean-code)  
+9. [Code First](#code-first)
+10. [Controllers](#controllers)
+11. [CORS (Cross-Origin Resource Sharing)](#cors)
+12. [Data Transfer Objects](#dto)  
+13. [Defensive Coding](#defensive-coding)
+14. [Dependency Injection](#dependency-injection-og-interfaces)
+15. [Design Patterns](#design-patterns)  
+16. [Domain Driven Design (DDD)](#domain-driven-design-ddd)  
+17. [Entity](#entity)  
+18. [Encapsulation](#encapsulation)
+19. [FAQ](#faq)  
+20. [Fluent Api](#fluent-api)  
+21. [Forretningsobjekt](#forretningsobjekt)
+22. [FromBody](#frombody)  
+23. [ICollection](#icollection)
+24. [IEnumerable<T>](#ienumerable)
+25. [Iterative Agile](#iterative-agile)  
+26. [JWT](#jwt)  
+27. [Klasser](#klasser)  
+28. [Models](#models)  
+29. [Objekt](#objekt)  
+30. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
+31. [Repository og interface](#repository-og-interface)
+32. [Scalar](#scalar)  
+33. [Separation of Concerns](#separation-of-concerns)
+34. [Services](#services)  
+35. [.NET Apps](#net-apps)
 
 
 
@@ -2361,8 +2362,14 @@ public IActionResult AddBook(int categoryId, [FromBody] BookDto book)
 ### TL;DR
 [FromBody]: Bruger JSON fra request body
 
+Bruges især ved POST/PUT/PATCH
+
+Gør det muligt at automatisk binde JSON til en C#-model
+
 
 # FAQ
+
+### Kørsel af VS application
 
 ´´´csharp
 
@@ -2373,8 +2380,77 @@ Fejl: "System.Security.Cryptography.ProtectedData.dll" ... Exceeded retry count 
 Kan forekomme, hvis Visual Studio køres fra OneDrive
 
 
-Bruges især ved POST/PUT/PATCH
+---
+[Home](#indholdsfortegnelse)
 
-Gør det muligt at automatisk binde JSON til en C#-model
+# ChangeTracker
+
+`ChangeTracker` er en del af EF's `DbContext`, og den holder øje med entiteters tilstand i konteksten:
+
+-  Hvilke entiteter er tilføjet (`Added`)
+-  Hvilke er blevet ændret (`Modified`)
+-  Hvilke skal slettes (`Deleted`)
+-  Hvilke er uændret (`Unchanged`)
+
+---
+
+### Typisk brug
+
+```csharp
+var changedEntities = context.ChangeTracker.Entries()
+    .Where(e => e.State == EntityState.Modified)
+    .ToList();
+```
+
+Dette filtrerer alle entiteter i DbContext, der er markeret som ændrede (f.eks. hvis en bruger har opdateret et navn i et objekt).
+
+```csharp
+var book = await context.Books.FindAsync(1);
+book.Title = "Ny titel";
+
+var entries = context.ChangeTracker.Entries();
+
+foreach (var entry in entries)
+{
+    Console.WriteLine($"Entity: {entry.Entity.GetType().Name}, State: {entry.State}");
+}
+```
+
+```yaml
+Entity: Book, State: Modified
+```
+
+| State       | Forklaring                          |
+| ----------- | ----------------------------------- |
+| `Added`     | En ny entitet er oprettet           |
+| `Modified`  | En eksisterende entitet er ændret   |
+| `Deleted`   | En entitet er markeret til sletning |
+| `Unchanged` | Ingen ændringer er registreret      |
+| `Detached`  | Ikke spores længere af `DbContext`  |
 
 
+### Avanceret: Ændringer på felt-niveau
+```csharp
+var entry = context.Entry(book);
+
+foreach (var prop in entry.OriginalValues.Properties)
+{
+    var original = entry.OriginalValues[prop]?.ToString();
+    var current = entry.CurrentValues[prop]?.ToString();
+
+    if (original != current)
+    {
+        Console.WriteLine($"{prop.Name} changed from '{original}' to '{current}'");
+    }
+}
+```
+
+### Hvornår er det nyttigt?
+- Logging af ændringer
+- Auditing (hvem ændrede hvad og hvornår)
+- Validere ændringer før de gemmes
+- Debugging og fejlsøgning
+
+
+---
+[Home](#indholdsfortegnelse)
