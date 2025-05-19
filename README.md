@@ -2302,6 +2302,47 @@ Når du returnerer både et objekt og et HTTP-statuskode-resultat, bruger man ty
 - Returnere fejlbeskeder	return BadRequest("Invalid input");
 - Returnere ressourcer med placering (POST)	CreatedAtAction(...)
 
+### Test af ActionResult<T>
+Når du returnerer en **ActionResult<T>** i ASP.NET Core – så har resultatet to mulige veje:
+
+```csharp
+public async Task<ActionResult<Book>> CreateBook(BookDto bookDto)
+```
+
+Når denne metode returnerer noget, har ActionResult<Book> to felter:
+
+| Ejendom  | Sæt når …                           | Typisk brugt med                                |
+| -------- | ----------------------------------- | ----------------------------------------------- |
+| `Value`  | du returnerer bare objektet direkte | `return book;`                                  |
+| `Result` | du returnerer et IActionResult      | `return Ok(book);`, `return BadRequest();` osv. |
+
+```csharp
+// 1. Value bliver sat, Result er null:
+return book;
+
+// 2. Result bliver sat (OkObjectResult), Value er null:
+return Ok(book);
+```
+### Eksempel 1 – Value er IKKE null:
+```csharp
+[HttpPost]
+public ActionResult<Book> CreateBook(BookDto bookDto)
+{
+    var book = new Book { Title = bookDto.Title, BasePrice = bookDto.BasePrice };
+    return book; // <- direkte objekt-returnering
+}
+```
+### Eksempel 2 – Value er null:
+```csharp
+[HttpPost]
+public ActionResult<Book> CreateBook(BookDto bookDto)
+{
+    var book = new Book { Title = bookDto.Title, BasePrice = bookDto.BasePrice };
+    return Ok(book); // <- wrapped i IActionResult
+}
+```
+
+**Du bør kun bruge Ok(book), hvis du skal returnere noget andet end 200 OK afhængig af kontekst (f.eks. BadRequest() hvis noget gik galt).**
 
 
 ---
