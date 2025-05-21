@@ -1386,7 +1386,7 @@ Fluent API er nødvendigt, når du skal have **fuld kontrol** over, hvordan dine
 ---
 [Home](#indholdsfortegnelse)
 # Controllers
-En **Controller** i ASP.NET Core er en central del af **MVC (Model-View-Controller)**-designmønstret og fungerer som en **formidler** mellem brugerens input og applikationens logik. Controlleren **modtager HTTP-anmodninger**, behandler dem og returnerer **svar (response)** til brugeren, ofte i form af **HTML, JSON** eller **XML**.
+En **Controller** i ASP.NET Core fungerer som en **formidler** mellem brugerens input og applikationens logik. Controlleren **modtager HTTP-anmodninger**, behandler dem og returnerer **svar (response)** til brugeren, ofte i form af **HTML, JSON** eller **XML**.
 
 ### Rolle og Ansvar
 
