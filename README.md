@@ -2593,7 +2593,7 @@ foreach (var prop in entry.OriginalValues.Properties)
 # Lagstruktur
 ### Lagene og deres ansvar
 
-## 1. Api (præsentationslaget / WebAPI-projektet)
+### 1. Api (præsentationslaget / WebAPI-projektet)
 Det eneste lag der ved noget om HTTP og Web.  
 Her hører følgende hjemme:
 
@@ -2622,7 +2622,7 @@ Her hører følgende hjemme:
 
 ---
 
-## 3. Data (infrastruktur / persistence-lag)
+### 3. Data (infrastruktur / persistence-lag)
 Alt det, der har med lagring og dataadgang at gøre.  
 Her hører følgende hjemme:
 
@@ -2634,7 +2634,7 @@ Her hører følgende hjemme:
 
 ---
 
-## 4. (Valgfrit) Application-lag (ofte mellem Domain og Api)
+### 4. (Valgfrit) Application-lag (ofte mellem Domain og Api)
 Bruges typisk i Clean Architecture / DDD for at adskille *use cases* fra præsentation og domain.
 
 - ✅ **Services** (som orchestration/brugsscenarier, fx `CreateOrderService`)
@@ -2701,3 +2701,5 @@ DDD handler om at bygge software omkring det **forretningsdomæne**, systemet mo
     /Queries
 ```
 
+---
+[Home](#indholdsfortegnelse)
