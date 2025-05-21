@@ -28,15 +28,16 @@
 24. [IEnumerable<T>](#ienumerable)
 25. [Iterative Agile](#iterative-agile)  
 26. [JWT](#jwt)  
-27. [Klasser](#klasser)  
-28. [Models](#models)  
-29. [Objekt](#objekt)  
-30. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
-31. [Repository og interface](#repository-og-interface)
-32. [Scalar](#scalar)  
-33. [Separation of Concerns](#separation-of-concerns)
-34. [Services](#services)  
-35. [.NET Apps](#net-apps)
+27. [Klasser](#klasser)
+28. [Lagene og deres ansvar](#lagstruktur)
+29. [Models](#models)  
+30. [Objekt](#objekt)  
+31. [OOP (Objektorienteret programmering)](#oop-objektorienteret-programmering)  
+32. [Repository og interface](#repository-og-interface)
+33. [Scalar](#scalar)  
+34. [Separation of Concerns](#separation-of-concerns)
+35. [Services](#services)  
+36. [.NET Apps](#net-apps)
 
 
 
@@ -2586,3 +2587,117 @@ foreach (var prop in entry.OriginalValues.Properties)
 
 ---
 [Home](#indholdsfortegnelse)
+
+
+
+# Lagstruktur
+### Lagene og deres ansvar
+
+## 1. Api (præsentationslaget / WebAPI-projektet)
+Det eneste lag der ved noget om HTTP og Web.  
+Her hører følgende hjemme:
+
+- ✅ **Controllers**
+- ✅ **DTO'er**
+- ✅ **Filters** (f.eks. `ActionFilter`, `ExceptionFilter`)
+- ✅ **Model binders**
+- ✅ **Input validation attributes** (evt. FluentValidation + integration her)
+- 🔁 Mapper DTO’er til domain-objekter og omvendt (AutoMapper eller manuelt)
+
+👉 *Tænk på dette lag som et interface mod brugeren eller klienten.*
+
+---
+
+### 2. Domain (forretningslaget / core logic)
+Hjertet af din applikation – *domænemodeller og regler*.  
+Her hører følgende hjemme:
+
+- ✅ **Entities / Models**
+- ✅ **Value Objects**
+- ✅ **Interfaces** for fx `IRepository`, `IService` – ingen implementeringer!
+- ✅ **Domain Services** (f.eks. regler der ikke naturligt hører til én entitet)
+- ✅ **Enums**, **Exceptions**, **Business Rules**
+
+💡 *Det skal være 100% uafhængigt af data/adgang og frameworks.*
+
+---
+
+## 3. Data (infrastruktur / persistence-lag)
+Alt det, der har med lagring og dataadgang at gøre.  
+Her hører følgende hjemme:
+
+- ✅ **DbContext**
+- ✅ **EF Core konfigurationer** (`OnModelCreating`, `EntityTypeConfiguration`)
+- ✅ **Repository-implementeringer**
+- ✅ **Migreringer** (valgfrit – kan også være i Api)
+- ❌ **Ingen domænelogik eller DTO-håndtering**
+
+---
+
+## 4. (Valgfrit) Application-lag (ofte mellem Domain og Api)
+Bruges typisk i Clean Architecture / DDD for at adskille *use cases* fra præsentation og domain.
+
+- ✅ **Services** (som orchestration/brugsscenarier, fx `CreateOrderService`)
+- ✅ **Command/query classes** (fx med MediatR)
+- ✅ **Interfaces til services**
+- ✅ **Input/output modeller**
+- 🚫 **Ingen EF Core / DbContext**
+
+*Hvis du ikke har et Application-lag endnu, kan du godt lægge services i Api eller oprette det senere.*
+
+---
+
+### Hvor skal hvad ligge?
+
+| Komponent         | Typisk placering               | Forklaring                      |
+|------------------|--------------------------------|----------------------------------|
+| `BookController` | `Api/Controllers`              | Web API-kald                     |
+| `BookDto`        | `Api/DTOs`                     | Data til/fra klient              |
+| `IBookService`   | `Domain/Interfaces`            | Kontrakt for logik               |
+| `BookService`    | `Data/Services` (eller `Application`) | Implementering            |
+| `IBookRepository`| `Domain/Interfaces`            | Abstraktion for dataadgang       |
+| `BookRepository` | `Data/Repositories`            | EF Core-implementering           |
+| `Book`           | `Domain/Entities`              | Domænemodel                      |
+| `AppDbContext`   | `Data`                         | DbContext for EF Core            |
+| `Validation`     | `Api/Validation` (eller `Application`) | FluentValidation eller custom logic |
+| `ActionFilter`   | `Api/Filters`                  | Fx logging, exceptions           |
+
+---
+
+### Hvad er Domain-Driven Design (DDD)?
+
+DDD handler om at bygge software omkring det **forretningsdomæne**, systemet modellerer.
+
+- **Entities**: Objekter med identitet over tid (f.eks. `Book`, `Order`)
+- **Value Objects**: Objekter uden identitet (f.eks. `Money`, `Address`)
+- **Aggregates**: Grupper af entiteter der behandles som én enhed
+- **Repositories**: Abstraktion over datatilgang
+- **Domain Services**: Forretningslogik uden naturlig placering i en entitet
+
+---
+
+### Typisk løsningstruktur i DDD + lagdeling
+
+```plaintext
+/MyProject.sln
+  /MyProject.Api
+    /Controllers
+    /DTOs
+    /Filters
+    /Validation
+  /MyProject.Domain
+    /Entities
+    /Interfaces
+    /ValueObjects
+    /Enums
+  /MyProject.Data
+    /Repositories
+    /Services
+    /EFConfigurations
+    AppDbContext.cs
+  /MyProject.Application (valgfrit)
+    /Services
+    /Commands
+    /Queries
+```
+
