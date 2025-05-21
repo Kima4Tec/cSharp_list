@@ -1463,6 +1463,97 @@ namespace MyApplication.Controllers
 3. **Standard HTTP-statuskoder**: Sørg for, at din controller returnerer passende HTTP-statuskoder som 200 (OK), 201 (Created), 400 (Bad Request), 404 (Not Found), 500 (Internal Server Error).
 4. **Afhængighedsinjektion**: Brug afhængighedsinjektion til at få adgang til de nødvendige tjenester, så controlleren er løs koblet og lettere at teste.
 
+
+
+## Gennemgang af Web API Controller i ASP.NET Core
+
+```csharp
+[ApiController]
+[Route("[controller]")]
+public class WeatherForecastController : ControllerBase
+```
+---
+
+### 🔹 `[ApiController]` – Attribut for Web API-funktionalitet
+
+### Formål:
+Markerer klassen som en **Web API-controller**, hvilket aktiverer en række forbedringer og konventioner i ASP.NET Core.
+
+### Effekter af `[ApiController]`:
+
+1. **Model binding og validering automatisk:**
+   - Hvis du fx har en `[FromBody] MyDto dto`-parameter, og modellen ikke er gyldig, returnerer ASP.NET Core automatisk `400 Bad Request` med valideringsfejl.
+
+2. **Konventioner for parameterkilder:**
+   - Du behøver ofte ikke angive `[FromBody]` – det antages automatisk baseret på parameterens type.
+
+3. **ProblemDetails-respons:**
+   - Ved valideringsfejl returneres en struktureret JSON-respons i [RFC 7807 ProblemDetails](https://tools.ietf.org/html/rfc7807)-format.
+
+4. **Automatisk håndtering af binding errors.**
+
+Det er stærkt anbefalet at bruge `[ApiController]` i alle Web API-controllere.
+
+---
+
+### `[Route("[controller]")]` – Routing-attribut
+
+### Formål:
+Angiver **basis-ruten** (URL-stien) for controllerens endpoints.
+
+### Hvad betyder `"[controller]"`?
+Det er en **route-token** – en placeholder, der automatisk bliver erstattet med controllerens navn **uden "Controller"**-suffikset.
+
+> Eksempel: `WeatherForecastController` bliver til ruten:
+```
+/WeatherForecast
+```
+
+### Sammen med `[HttpGet]` eller `[HttpPost]`:
+```csharp
+[HttpGet] // GET /WeatherForecast
+public IEnumerable<WeatherForecast> Get() { ... }
+
+[HttpPost("create")] // POST /WeatherForecast/create
+public IActionResult Create([FromBody] WeatherForecast item) { ... }
+```
+
+---
+
+### 🔹 `public class WeatherForecastController : ControllerBase`
+
+### Det er din Web API-controllerklasse
+
+- **`public`**: Klassen skal være tilgængelig for routing-mekanismen.
+- **`WeatherForecastController`**: Konventionelt navngivet, slutter på `Controller`.
+- **`: ControllerBase`**: Arver fra `ControllerBase`, som er basisklassen for Web API-controllere.
+
+### Hvad får du med `ControllerBase`?
+- `Ok()`, `NotFound()`, `BadRequest()` m.fl. – metoder til at returnere HTTP-responskoder og data.
+- Model binding.
+- Routing-integration.
+
+> Web API-controllere arver fra `ControllerBase`, mens MVC-controllere arver fra `Controller`.
+
+---
+
+## Samlet eksempel
+
+```csharp
+[ApiController]
+[Route("[controller]")]
+public class WeatherForecastController : ControllerBase
+{
+    [HttpGet]
+    public IEnumerable<WeatherForecast> Get()
+    {
+        // Kaldes ved GET /WeatherForecast
+    }
+}
+```
+
+Når du kalder `/WeatherForecast` med en GET-request, håndteres det af `Get()`-metoden. `[ApiController]` sikrer automatisk validering og passende svar.
+
 ### Sammenfatning
 
 - En **Controller** håndterer **HTTP-anmodninger**, interagerer med **services** eller **databasen** og sender et **svar** tilbage til klienten.
